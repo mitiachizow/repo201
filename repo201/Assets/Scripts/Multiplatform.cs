@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -7,11 +7,15 @@ namespace SceneBehavior
 {
     public static class Multiplatform
     {
+
+        /*
+         * Класс Multiplatform позволяет без проблем работать на любой платформе, просто сменив пункт CurrentPlatform
+         */
         private static Platform CurrentPlatform { get; set; }
 
         static Multiplatform()
         {
-            CurrentPlatform = Platform.Pc;
+            CurrentPlatform = Platform.Android;
         }
 
         public static int TouchCount()
