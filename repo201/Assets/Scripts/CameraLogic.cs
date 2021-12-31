@@ -28,51 +28,117 @@ namespace CameraBehavior
          * externalRadius - радиус, по которому перемещается камера в верхнем положении
          * в будущем, когда можно будет добавлять больше регионов в игре, необходимо будет убрать externalRadius*/
 
-        CameraFunctional cameraFunctional;
+        CameraFunctional currentCamera;
+
+        delegate void CurrentLogic();
+        CurrentLogic currentLogic;
 
         void Start()
         {
-            //Transform GlobalAnchor = GameObject.Find("Global Anchor").GetComponent<Transform>();
-            //Transform CameraAnchor = GameObject.Find("Camera Anchor").GetComponent<Transform>();
-            //Инициализировать камеру и сцену в отдельном скрипте
-            //CameraParams cameraParams = new CameraParams(Camera.main,GameObject.Find("Global Anchor"),
-            //    GameObject.Find("Local Anchor"), maxCircle: 7f, midCircle: 2f, minCircle: 1f,
-            //    externalCircle: 8.5f, externalRadius: 50f, standartRadius: 45f);
+            currentLogic = NormalMode;
+            sceneState = SceneState.Normal;
+            GameObject.Find("Scene State Controller").GetComponent<SceneStateController>().AddHandler(ChangeCamLogic);
 
-            //SceneParams sceneParams = new SceneParams(50, 50, 2);
-
-            cameraFunctional = new CameraFunctional(Camera.main.transform,Camera.main.transform.Find("Camera Anchor"),0f,10f,15f,30f);
+            currentCamera = new CameraFunctional(Camera.main.transform, Camera.main.transform.Find("Camera Anchor"), GameObject.Find("Global Anchor").transform,
+                minNormalCircleHeigh: 5f, midNormalCircleHeigh: 10f, maxNormalCircleHeigh: 15f, externalCircleHeigh: 120f, normalCircleRadius: 50f, externalCircleRadius: 170f);
         }
 
-        // Update is called once per frame
         void Update()
         {
             oldTouchCount = touchCount;
             touchCount = Multiplatform.TouchCount();
 
-            if(touchCount != oldTouchCount && touchCount != 0) //при первом нажатии необходимо считать необходимые параметры
+            currentLogic();
+        }
+
+        void NormalMode()
+        {
+            if (touchCount != oldTouchCount && touchCount != 0) //при первом нажатии необходимо считать необходимые параметры
             {
-                cameraFunctional.FirstTouch();
+                currentCamera.FirstTouch();
+                return;
             }
 
-            if(touchCount == 0 && cameraFunctional.IsResidual) //остаточное движение
+            if (touchCount == 0 && currentCamera.IsResidual) //остаточное движение
             {
-                cameraFunctional.TransformResidual();
+                currentCamera.ResidualTransform();
+
             }
 
-            switch (touchCount)
+            switch (touchCount) //Базовая логика перемещения и вращения камеры
             {
                 case 1:
-                    cameraFunctional.TransformManual();
+                    currentCamera.OneTouchTransform();
                     break;
                 case 2:
-                    cameraFunctional.TwoTouchRotate();
-                    cameraFunctional.ScaleManual();
+                    currentCamera.TwoTouchRotate();
+                    currentCamera.TwoTouchScale();
                     break;
                 case 3:
                     break;
                 default:
                     break;
+            }
+        }
+
+        float rotateTimer;
+        void ExternalMode()
+        {
+            switch (touchCount) //Базовая логика перемещения и вращения камеры. обрати внимание, что в первом случае стоит return
+            {
+                case 0:
+                    if(currentCamera.IsResidual)
+                    {
+                        currentCamera.ResidualRotate();
+                        break;
+                    }
+                    else
+                    {
+                        rotateTimer += Time.deltaTime;
+                        if (rotateTimer >= 10f) currentCamera.CircleRotateAutomatic(rotateTimer - 10f); //Занести это в камера функ?
+                        return;
+                    }
+                case 1:
+                    currentCamera.OneTouchRotate();
+                    break;
+                case 3:
+                    break;
+            }
+            rotateTimer = 0f;
+        }
+
+
+        /// <summary>
+        /// При переходе между External и Normal состояниями сцены, необходимо изменить положение камеры и ее функционал
+        /// </summary>
+        void ChangeMode()
+        {
+            if (currentCamera.ChangeMode(0.01f) <= 0.00001f)
+            {
+                switch (sceneState)
+                {
+                    case SceneState.External:
+                        currentLogic = ExternalMode;
+                        break;
+                    case SceneState.Normal:
+                        currentLogic = NormalMode;
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Содержит в себе текущее состояние сцены
+        /// </summary>
+        SceneState sceneState;
+
+        public void ChangeCamLogic(SceneState sceneState)
+        {
+            if ((sceneState == SceneState.External && this.sceneState == SceneState.Normal) || (sceneState == SceneState.Normal && this.sceneState == SceneState.External))
+            {
+                this.sceneState = sceneState;
+                currentLogic = ChangeMode;
+                currentCamera.GetFinalPoint(sceneState);
             }
         }
     }

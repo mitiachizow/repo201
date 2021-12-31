@@ -3,6 +3,7 @@ ScriptsOnlyBuild:
     Assembly-CSharp.dll:
     - CameraBehavior.CameraLogic
     - DELETE_KILL
+    - SceneBehavior.SceneStateController
     Unity.Rider.Editor.dll:
     - Packages.Rider.Editor.UnitTesting.CallbackData
     UnityEditor.TestRunner.dll:
@@ -65,19 +66,21 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 2566}
     - Class: 114
-      Script: {instanceID: 2648}
+      Script: {instanceID: 2614}
     - Class: 114
-      Script: {instanceID: 2668}
+      Script: {instanceID: 2650}
     - Class: 114
-      Script: {instanceID: 2728}
+      Script: {instanceID: 2670}
     - Class: 114
-      Script: {instanceID: 2876}
+      Script: {instanceID: 2730}
     - Class: 114
-      Script: {instanceID: 2970}
+      Script: {instanceID: 2878}
     - Class: 114
-      Script: {instanceID: 3378}
+      Script: {instanceID: 2972}
     - Class: 114
-      Script: {instanceID: 3498}
+      Script: {instanceID: 3380}
+    - Class: 114
+      Script: {instanceID: 3500}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -287,6 +290,12 @@ ScriptsOnlyBuild:
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: DELETE_KILL
+  - hash:
+      serializedVersion: 2
+      Hash: ac2d6ce69768ad468e90bc10088bf203
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: SceneBehavior
+    className: SceneStateController
   - hash:
       serializedVersion: 2
       Hash: 748dd2a2a28da4e618912da5ac45684b
@@ -548,4 +557,4 @@ ScriptsOnlyBuild:
   platform: 13
   scenePathNames:
   - Assets/Scenes/Playground.unity
-  playerPath: "Q:/Smol Town/\u0432\u0440\u0435\u043C\u0435\u043D\u043D\u043E\u0435/4.apk"
+  playerPath: "Q:/Smol Town/\u0432\u0440\u0435\u043C\u0435\u043D\u043D\u043E\u0435/7.apk"
