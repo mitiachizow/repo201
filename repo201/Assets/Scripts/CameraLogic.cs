@@ -40,7 +40,7 @@ namespace CameraBehavior
             GameObject.Find("Scene State Controller").GetComponent<SceneStateController>().AddHandler(ChangeCamLogic);
 
             currentCamera = new CameraFunctional(Camera.main.transform, Camera.main.transform.Find("Camera Anchor"), GameObject.Find("Global Anchor").transform,
-                minNormalCircleHeigh: 5f, midNormalCircleHeigh: 10f, maxNormalCircleHeigh: 15f, externalCircleHeigh: 120f, normalCircleRadius: 50f, externalCircleRadius: 170f);
+                minNormalCircleHeigh: 15f, midNormalCircleHeigh: 30f, maxNormalCircleHeigh: 50f, externalCircleHeigh: 120f, normalCircleRadius: 100f, externalCircleRadius: 270f, sceneState: sceneState);
         }
 
         void Update()
@@ -51,8 +51,30 @@ namespace CameraBehavior
             currentLogic();
         }
 
+        bool outOfRange;
+
         void NormalMode()
         {
+            //if (currentCamera.ForceBackToPlayground && localTimer <= 0.5f)
+            //{
+            //    localTimer += Time.deltaTime;
+            //    currentCamera.ResidualTransform();
+            //    return;
+            //}
+            //else
+            //{
+            //    currentCamera.ForceBackToPlayground = false;
+            //    localTimer = 0f;
+            //}
+
+            //}
+            //if (outOfRange && currentCamera.CheckOutOfRangeVertical())
+            //{
+            //    currentCamera.TransformVertical();
+            //    return;
+            //}
+            //else outOfRange = false;
+
             if (touchCount != oldTouchCount && touchCount != 0) //при первом нажатии необходимо считать необходимые параметры
             {
                 currentCamera.FirstTouch();
@@ -61,9 +83,30 @@ namespace CameraBehavior
 
             if (touchCount == 0 && currentCamera.IsResidual) //остаточное движение
             {
+                
                 currentCamera.ResidualTransform();
 
             }
+
+
+            if (((touchCount == 0 && oldTouchCount != 0) || (touchCount == 1 && oldTouchCount == 2)) && currentCamera.CheckOutOfRangeVertical()) //При выходе за границу карты, стартуют корутины и вы возвращаемся обратно.
+            {
+                currentCamera.GetFinalPoint(SceneState.Default);
+                outOfRange = true;
+                //Debug.Log("I'm out");
+                //currentCamera.StartCoroutineVertical(this);
+
+                //if (currentCamera.CheckOutOfRangeHorizontal())
+                //{
+                //    //currentCamera.StartCoroutineHorizontal(this);
+                //}
+            }
+            //else if (touchCount == 0 && (oldTouchCount != 0 || currentCamera.IsResidual) && currentCamera.CheckOutOfRangeHorizontal())
+            //{
+            //    currentCamera.GetFinalPoint(SceneState.Default);//?
+
+            //    //currentCamera.StartCoroutineHorizontal(this);
+            //}
 
             switch (touchCount) //Базовая логика перемещения и вращения камеры
             {
@@ -81,7 +124,7 @@ namespace CameraBehavior
             }
         }
 
-        float rotateTimer;
+        float localTimer;
         void ExternalMode()
         {
             switch (touchCount) //Базовая логика перемещения и вращения камеры. обрати внимание, что в первом случае стоит return
@@ -94,8 +137,8 @@ namespace CameraBehavior
                     }
                     else
                     {
-                        rotateTimer += Time.deltaTime;
-                        if (rotateTimer >= 10f) currentCamera.CircleRotateAutomatic(rotateTimer - 10f); //Занести это в камера функ?
+                        localTimer += Time.deltaTime;
+                        if (localTimer >= 10f) currentCamera.CircleRotateAutomatic(localTimer - 10f); //Занести это в камера функ?
                         return;
                     }
                 case 1:
@@ -104,7 +147,7 @@ namespace CameraBehavior
                 case 3:
                     break;
             }
-            rotateTimer = 0f;
+            localTimer = 0f;
         }
 
 

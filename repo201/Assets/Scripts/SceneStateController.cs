@@ -44,5 +44,6 @@ namespace SceneBehavior
         External = 20,
         ExternalEconomic = 21,
         Normal = 1,
+        Default = 0 //????? вписывается ли дефолт в логику?
     }
 }
