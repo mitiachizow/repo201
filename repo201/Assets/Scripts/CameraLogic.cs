@@ -51,30 +51,29 @@ namespace CameraBehavior
             currentLogic();
         }
 
-        bool outOfRange;
+
+
+        /// <summary>
+        /// Содержит в себе текущее состояние сцены
+        /// </summary>
+        SceneState sceneState;
+
+        public void ChangeCamLogic(SceneState sceneState)
+        {
+            if ((sceneState == SceneState.External && this.sceneState == SceneState.Normal) || (sceneState == SceneState.Normal && this.sceneState == SceneState.External))
+            {
+                this.sceneState = sceneState;
+                currentLogic = ChangeMode;
+                currentCamera.GetFinalPoint(sceneState);
+                currentCamera.ChangeMode(sceneState);
+            }
+        }
+
+
+        #region CameraModes
 
         void NormalMode()
         {
-            //if (currentCamera.ForceBackToPlayground && localTimer <= 0.5f)
-            //{
-            //    localTimer += Time.deltaTime;
-            //    currentCamera.ResidualTransform();
-            //    return;
-            //}
-            //else
-            //{
-            //    currentCamera.ForceBackToPlayground = false;
-            //    localTimer = 0f;
-            //}
-
-            //}
-            //if (outOfRange && currentCamera.CheckOutOfRangeVertical())
-            //{
-            //    currentCamera.TransformVertical();
-            //    return;
-            //}
-            //else outOfRange = false;
-
             if (touchCount != oldTouchCount && touchCount != 0) //при первом нажатии необходимо считать необходимые параметры
             {
                 currentCamera.FirstTouch();
@@ -83,30 +82,10 @@ namespace CameraBehavior
 
             if (touchCount == 0 && currentCamera.IsResidual) //остаточное движение
             {
-                
+
                 currentCamera.ResidualTransform();
 
             }
-
-
-            if (((touchCount == 0 && oldTouchCount != 0) || (touchCount == 1 && oldTouchCount == 2)) && currentCamera.CheckOutOfRangeVertical()) //При выходе за границу карты, стартуют корутины и вы возвращаемся обратно.
-            {
-                currentCamera.GetFinalPoint(SceneState.Default);
-                outOfRange = true;
-                //Debug.Log("I'm out");
-                //currentCamera.StartCoroutineVertical(this);
-
-                //if (currentCamera.CheckOutOfRangeHorizontal())
-                //{
-                //    //currentCamera.StartCoroutineHorizontal(this);
-                //}
-            }
-            //else if (touchCount == 0 && (oldTouchCount != 0 || currentCamera.IsResidual) && currentCamera.CheckOutOfRangeHorizontal())
-            //{
-            //    currentCamera.GetFinalPoint(SceneState.Default);//?
-
-            //    //currentCamera.StartCoroutineHorizontal(this);
-            //}
 
             switch (touchCount) //Базовая логика перемещения и вращения камеры
             {
@@ -130,7 +109,7 @@ namespace CameraBehavior
             switch (touchCount) //Базовая логика перемещения и вращения камеры. обрати внимание, что в первом случае стоит return
             {
                 case 0:
-                    if(currentCamera.IsResidual)
+                    if (currentCamera.IsResidual)
                     {
                         currentCamera.ResidualRotate();
                         break;
@@ -149,7 +128,6 @@ namespace CameraBehavior
             }
             localTimer = 0f;
         }
-
 
         /// <summary>
         /// При переходе между External и Normal состояниями сцены, необходимо изменить положение камеры и ее функционал
@@ -170,19 +148,6 @@ namespace CameraBehavior
             }
         }
 
-        /// <summary>
-        /// Содержит в себе текущее состояние сцены
-        /// </summary>
-        SceneState sceneState;
-
-        public void ChangeCamLogic(SceneState sceneState)
-        {
-            if ((sceneState == SceneState.External && this.sceneState == SceneState.Normal) || (sceneState == SceneState.Normal && this.sceneState == SceneState.External))
-            {
-                this.sceneState = sceneState;
-                currentLogic = ChangeMode;
-                currentCamera.GetFinalPoint(sceneState);
-            }
-        }
+        #endregion
     }
 }
