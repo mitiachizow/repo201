@@ -12,9 +12,9 @@ namespace SceneBehavior
     /// </summary>
     public static class Multiplatform
     {
-        static Platform сurrentPlatform { get; set; }
+        public static Platform сurrentPlatform { get; private set; }
 
-        static Multiplatform() => сurrentPlatform = Platform.Android;
+        static Multiplatform() => сurrentPlatform = Platform.Pc;
 
         public static int TouchCount
         {
@@ -25,7 +25,7 @@ namespace SceneBehavior
                     case Platform.Android:
                         return Input.touchCount;
                     case Platform.Pc:
-                        return Input.GetMouseButton(0) ? 1 : 0;
+                        return Input.GetMouseButton(0) ? Convert.ToInt32(Input.GetMouseButton(0)) + Convert.ToInt32(Input.GetKey(KeyCode.LeftControl)) : 0;
                     case Platform.Ios:
                     default:
                         throw new Exception("Version for IOS not ready yet.");
@@ -38,21 +38,21 @@ namespace SceneBehavior
             switch (сurrentPlatform)
             {
                 case Platform.Android:
-                    return GetTouchAndroid(i);
+                    return GetTouchPositionAndroid(i);
                 case Platform.Pc:
-                    return i == 0 ? GetTouchPc() : throw new Exception("How can you touch two places with one cursor in one time?");
+                    return GetTouchPositionPc(i);
                 case Platform.Ios:
                 default:
                     throw new Exception("Version for IOS not ready yet.");
 
             }
 
-            Vector3 GetTouchPc()
+            Vector3 GetTouchPositionPc(int i)
             {
                 return Input.mousePosition;
             }
 
-            Vector3 GetTouchAndroid(int j)
+            Vector3 GetTouchPositionAndroid(int j)
             {
                 return Input.GetTouch(j).position;
             }
@@ -63,27 +63,27 @@ namespace SceneBehavior
         /// логика полностью унаследована.
         /// </summary>
         /// <returns></returns>
-        public static bool IsPointerOverGameObject()
+        public static bool IsPointerOverUI()
         {
             if (TouchCount == 0) return false;
 
             switch (сurrentPlatform)
             {
                 case Platform.Pc:
-                    return IsIsPointerOverGameObjectPC();
+                    return IsPointerOverUIPC();
                 case Platform.Android:
-                    return IsIsPointerOverGameObjectAndroid();
+                    return IsPointerOverUIAndroid();
                 case Platform.Ios:
                 default:
                     throw new Exception("Version for IOS not ready yet.");
             }
 
-            bool IsIsPointerOverGameObjectPC()
+            bool IsPointerOverUIPC()
             {
                 return EventSystem.current.IsPointerOverGameObject(0);
             }
 
-            bool IsIsPointerOverGameObjectAndroid()
+            bool IsPointerOverUIAndroid()
             {
                 if (TouchCount == 1) return EventSystem.current.IsPointerOverGameObject(0);
                 else if (TouchCount == 2) return EventSystem.current.IsPointerOverGameObject(0) || EventSystem.current.IsPointerOverGameObject(1);
@@ -91,14 +91,14 @@ namespace SceneBehavior
             }
         }
 
-        enum Platform
-        {
-            Android = 1,
-            Pc = 2,
-            Ios = 3
-        }
+
     }
 
-
+    public enum Platform
+    {
+        Android = 1,
+        Pc = 2,
+        Ios = 3
+    }
 
 }

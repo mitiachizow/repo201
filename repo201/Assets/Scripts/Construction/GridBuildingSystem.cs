@@ -103,7 +103,7 @@ namespace ConstructionBehaviour
         void TransformBuilding()
         {
             if (touchCount != 1) { isTouchOverBuilding = false; return; }
-            if (Multiplatform.IsPointerOverGameObject()) return;
+            if (Multiplatform.IsPointerOverUI()) return;
 
             if (currentConstruction != null && RayCaster.isHit)
             {

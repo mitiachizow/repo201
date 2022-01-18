@@ -11,15 +11,10 @@ namespace CameraBehavior
     public class CameraLogic : MonoBehaviour
     {
         private int touchCount, oldTouchCount;
-        // Start is called before the first frame update
-
-        //public Transform CameraTransform { get; private set; }
-        //public Transform GlobalAnchor { get; private set; } //Вокруг GlobalAnchor происходит вращение камеры в верхнем положении
-        //public Transform CameraAnchor { get; private set; } //Вокруг LocalAnchor происходит вращение камеры в верхнем положении
 
         public readonly float minCircle, midCircle, maxCircle, externalCircle;
-        /* lowCircle - минимальная высота, на которую мы можем опуститься с камерой
-         * middleCircle - высота, на которую происходит возвращение камеры из externalCircle
+        /* minCircle - минимальная высота, на которую мы можем опуститься с камерой
+         * midCircle - высота, на которую происходит возвращение камеры из externalCircle
          * maxCircle - высота, выше которой мы не можем подняться вручную
          * externalCircle - высота, на которую происходит переход при смене режима игры */
 
@@ -39,7 +34,7 @@ namespace CameraBehavior
             GameObject.Find("Scene State Controller").GetComponent<SceneStateController>().AddHandler(ChangeCamLogic);
 
             currentCamera = new CameraFunctional(Camera.main.transform, Camera.main.transform.Find("Camera Anchor"), GameObject.Find("Global Anchor").transform,
-                minNormalCircleHeigh: 15f, midNormalCircleHeigh: 30f, maxNormalCircleHeigh: 50f, externalCircleHeigh: 120f, normalCircleRadius: 100f, externalCircleRadius: 270f);
+                minNormalCircleHeigh: 15f, midNormalCircleHeigh: 30f, maxNormalCircleHeigh: 50f, externalCircleHeigh: 120f, normalCircleRadius: 350f, externalCircleRadius: 400f);
         }
 
         void Update()
@@ -98,7 +93,7 @@ namespace CameraBehavior
             }
         }
 
-        float localTimer;
+        float localTimer;//может быть стоит вынести из этого класса
         void ExternalMode()
         {
             if (touchCount != oldTouchCount && touchCount != 0) //при первом нажатии необходимо считать необходимые параметры
@@ -140,7 +135,7 @@ namespace CameraBehavior
         /// </summary>
         void ChangeMode()
         {
-            if (currentCamera.ChangeMode(0.01f) <= 0.00001f)
+            if (currentCamera.ChangeMode())
             {
                 switch (SceneStateController.CurrentSceneState)
                 {

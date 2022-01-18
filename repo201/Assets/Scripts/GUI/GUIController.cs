@@ -28,7 +28,7 @@ namespace SceneBehavior
 
             if (!RayCaster.isHit) return;
 
-            if (oldTouchCount == 1 && touchCount == 0 && currentHit.collider.gameObject.name == oldHit.collider.gameObject.name) BehaviourLogic();
+            if (oldTouchCount == 1 && touchCount == 0 && currentHit.collider.gameObject.name == oldHit.collider.gameObject.name) BehaviourLogic();//тут вылезает ошибка регулярно, не очень понятно почему
 
             if (touchCount != 1) return;
 
