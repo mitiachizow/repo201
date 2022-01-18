@@ -11,10 +11,9 @@ namespace CameraBehavior
     {
         Transform cameraAnchor, globalAnchor, cameraTransform;
         readonly float minNormalCircleHeigh, midNormalCircleHeigh, maxNormalCircleHeigh, externalCircleHeigh, externalCircleRadius, normalCircleRadius;
-        SceneState sceneState;
 
         public CameraFunctional(Transform cameraTransform, Transform cameraAnchor, Transform globalAnchor, float minNormalCircleHeigh, float midNormalCircleHeigh, float maxNormalCircleHeigh,
-            float externalCircleHeigh, float externalCircleRadius, float normalCircleRadius, ref SceneState sceneState)
+            float externalCircleHeigh, float externalCircleRadius, float normalCircleRadius)
         {
             this.cameraTransform = cameraTransform;
             this.cameraAnchor = cameraAnchor;
@@ -29,7 +28,6 @@ namespace CameraBehavior
 
             this.globalAnchor = globalAnchor;
 
-            this.sceneState = sceneState;
 
         }
 
@@ -41,7 +39,7 @@ namespace CameraBehavior
             }
             set
             {
-                switch (sceneState)
+                switch (SceneStateController.CurrentSceneState)
                 {
                     case SceneState.Normal:
                         {
@@ -302,9 +300,9 @@ namespace CameraBehavior
 
         }
 
-        public void OneTouchRotate() //логика тут не очень работает по какой то причине, посмотреть этот момент
+        public void OneTouchRotate()
         {
-            float xDeltaPosition = Input.GetTouch(0).deltaPosition.x; //Эта логика работает  только для смартфона, сделать возможность использовать это и для мыши
+            float xDeltaPosition = (firstTouchPosition.x - Multiplatform.TouchPosition(0).x)*Time.deltaTime;
 
             float multiplier = 0.01f; //Change this one, to change speed of manual rotate???это тут вообще нужно?
 
@@ -359,7 +357,6 @@ namespace CameraBehavior
                 residualSpeedTransform = new Vector3(0f, 0f, 0f);
                 IsResidual = false;
                 safeChangeScale = 0f;
-                this.sceneState = sceneState;
             }
         }
 
@@ -387,7 +384,6 @@ namespace CameraBehavior
             return Mathf.Abs(safeChangeScale - oldSafeChangeScale);
         }
 
-
         public void CircleRotateAutomatic(float timer)
         {
             float automaticSpeed = 0.5f;
@@ -396,11 +392,5 @@ namespace CameraBehavior
 
             RotateLogic(speedRotate, globalAnchor, externalCircleRadius);
         }
-
-        //SceneState sceneState;
-        //public void ChangeMode(SceneState sceneState)
-        //{
-        //    this.sceneState = sceneState;
-        //}
     }
 }

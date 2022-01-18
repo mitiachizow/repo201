@@ -9,14 +9,14 @@ namespace GlobalPredictor
     {
         Economic economic;
         Population population;
-        //Events events;
+        Events events;
 
         void Start()
         {
             timeUpdate = 0f;
             economic = new Economic();
             population = new Population();
-            //events = new Events();
+            events = new Events();
         }
 
         float timeUpdate;
@@ -30,7 +30,7 @@ namespace GlobalPredictor
 
             population.Calculate();
             economic.Calculate();
-            //events.Calculate();
+            events.Calculate();
         }
     }
 

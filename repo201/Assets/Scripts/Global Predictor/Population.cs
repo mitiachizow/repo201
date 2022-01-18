@@ -18,7 +18,7 @@ namespace GlobalPredictor
 
         public void Calculate()
         {
-            population = population * (birthRate / deathRate);
+            //population = population * (birthRate / deathRate);
             //Debug.Log("Population :" + population);
         }
     }

@@ -16,9 +16,9 @@ namespace SceneBehavior
             GameObject.Find("Scene State Controller").GetComponent<SceneStateController>().AddHandler(ChangeCanvasState);
         }
 
-        void ChangeCanvasState(SceneState sceneState)
+        void ChangeCanvasState()
         {
-            switch (sceneState)
+            switch (SceneStateController.CurrentSceneState)
             {
                 case SceneState.External:
                     canvasState1.SetActive(false);

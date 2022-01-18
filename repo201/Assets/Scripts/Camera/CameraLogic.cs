@@ -36,36 +36,32 @@ namespace CameraBehavior
         void Start()
         {
             currentLogic = NormalMode;
-            sceneState = SceneState.Normal;
             GameObject.Find("Scene State Controller").GetComponent<SceneStateController>().AddHandler(ChangeCamLogic);
 
             currentCamera = new CameraFunctional(Camera.main.transform, Camera.main.transform.Find("Camera Anchor"), GameObject.Find("Global Anchor").transform,
-                minNormalCircleHeigh: 15f, midNormalCircleHeigh: 30f, maxNormalCircleHeigh: 50f, externalCircleHeigh: 120f, normalCircleRadius: 100f, externalCircleRadius: 270f, sceneState: ref sceneState);
+                minNormalCircleHeigh: 15f, midNormalCircleHeigh: 30f, maxNormalCircleHeigh: 50f, externalCircleHeigh: 120f, normalCircleRadius: 100f, externalCircleRadius: 270f);
         }
 
         void Update()
         {
             oldTouchCount = touchCount;
             touchCount = Multiplatform.TouchCount;
+            //if (Multiplatform.IsPointerOverGameObject()) return;
 
             currentLogic();
         }
 
-
-
-        /// <summary>
-        /// Содержит в себе текущее состояние сцены
-        /// </summary>
-        SceneState sceneState;
-
-        public void ChangeCamLogic(SceneState sceneState)
+        public void ChangeCamLogic()
         {
-            if ((sceneState == SceneState.External && this.sceneState == SceneState.Normal) || (sceneState == SceneState.Normal && this.sceneState == SceneState.External))
+            if ((SceneStateController.CurrentSceneState == SceneState.External && SceneStateController.OldSceneState == SceneState.Normal) || (SceneStateController.CurrentSceneState == SceneState.Normal && SceneStateController.OldSceneState == SceneState.External))
             {
-                this.sceneState = sceneState;
                 currentLogic = ChangeMode;
-                currentCamera.GetFinalPoint(sceneState);
+                currentCamera.GetFinalPoint(SceneStateController.CurrentSceneState);
             }
+
+            if(SceneStateController.CurrentSceneState == SceneState.BuildingMovement) currentLogic = NullMode;
+            if (SceneStateController.OldSceneState == SceneState.BuildingMovement && SceneStateController.CurrentSceneState == SceneState.Normal) currentLogic = NormalMode;
+            currentCamera.FirstTouch();
         }
 
 
@@ -105,6 +101,12 @@ namespace CameraBehavior
         float localTimer;
         void ExternalMode()
         {
+            if (touchCount != oldTouchCount && touchCount != 0) //при первом нажатии необходимо считать необходимые параметры
+            {
+                currentCamera.FirstTouch();
+                return;
+            }
+
             switch (touchCount) //Базовая логика перемещения и вращения камеры. обрати внимание, что в первом случае стоит return
             {
                 case 0:
@@ -128,6 +130,11 @@ namespace CameraBehavior
             localTimer = 0f;
         }
 
+        void NullMode()
+        {
+
+        }
+
         /// <summary>
         /// При переходе между External и Normal состояниями сцены, необходимо изменить положение камеры и ее функционал
         /// </summary>
@@ -135,7 +142,7 @@ namespace CameraBehavior
         {
             if (currentCamera.ChangeMode(0.01f) <= 0.00001f)
             {
-                switch (sceneState)
+                switch (SceneStateController.CurrentSceneState)
                 {
                     case SceneState.External:
                         currentLogic = ExternalMode;

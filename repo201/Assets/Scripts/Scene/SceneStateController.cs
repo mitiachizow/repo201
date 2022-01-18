@@ -7,31 +7,33 @@ namespace SceneBehavior
 {
     public class SceneStateController : MonoBehaviour
     {
-        
-        public CameraBehavior.CameraLogic camLogic;
-        SceneState sceneState;
+        public static SceneState CurrentSceneState { get; private set; }
+        public static SceneState OldSceneState { get; private set; }
 
-        public delegate void ChangeState(SceneState sceneState);
+        public delegate void ChangeState();
         event ChangeState Notyfi;
 
         public void Start()
         {
-            //Instantiate(Resources.Load<GameObject>("Factory"));
+            CurrentSceneState = OldSceneState = SceneState.Normal;
         }
+
         public void ChangeSceneState(string sceneState)
         {
-            Debug.Log("Wow");
+            OldSceneState = CurrentSceneState;
             switch (sceneState)
             {
                 case "External":
-                    Debug.Log("Ext");
-                    Notyfi.Invoke(SceneState.External);
+                    CurrentSceneState = SceneState.External;
+                    Notyfi.Invoke();
                     break;
-                //case "ExternalEconomic":
-                //    Notyfi.Invoke(SceneState.ExternalEconomic);
-                //    break;
                 case "Normal":
-                    Notyfi.Invoke(SceneState.Normal);
+                    CurrentSceneState = SceneState.Normal;
+                    Notyfi.Invoke();
+                    break;
+                case "BuildingMovement":
+                    CurrentSceneState = SceneState.BuildingMovement;
+                    Notyfi.Invoke();
                     break;
             }
         }
@@ -47,7 +49,7 @@ namespace SceneBehavior
         External = 20,
         ExternalEconomic = 21,
         Normal = 1,
-        BuildingMovement,
-        Default = 0 //????? вписывается ли дефолт в логику?
+        BuildingMovement = 3,
+        Default = 0
     }
 }

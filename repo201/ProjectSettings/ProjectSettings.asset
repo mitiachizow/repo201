@@ -238,7 +238,7 @@ PlayerSettings:
   AndroidTargetArchitectures: 1
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: Q:/Smol Town/sight.keystore
+  AndroidKeystoreName: "Q:/Smol Town/\u0432\u0440\u0435\u043C\u0435\u043D\u043D\u043E\u0435/sight.keystore"
   AndroidKeyaliasName: kaliningrad picard
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 0
