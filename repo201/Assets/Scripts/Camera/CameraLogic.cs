@@ -10,7 +10,7 @@ namespace CameraBehavior
 {
     public class CameraLogic : MonoBehaviour
     {
-        private int touchCount, oldTouchCount;
+        //private int touchCount, oldTouchCount;
 
         public readonly float minCircle, midCircle, maxCircle, externalCircle;
         /* minCircle - минимальная высота, на которую мы можем опуститься с камерой
@@ -39,10 +39,7 @@ namespace CameraBehavior
 
         void Update()
         {
-            oldTouchCount = touchCount;
-            touchCount = Multiplatform.TouchCount;
-            //if (Multiplatform.IsPointerOverGameObject()) return;
-
+            if (Input2.TouchCount != Input2.OldTouchCount && Input2.TouchCount != 0) return;
             currentLogic();
         }
 
@@ -54,9 +51,8 @@ namespace CameraBehavior
                 currentCamera.GetFinalPoint(SceneStateController.CurrentSceneState);
             }
 
-            if(SceneStateController.CurrentSceneState == SceneState.BuildingMovement) currentLogic = NullMode;
+            if (SceneStateController.CurrentSceneState == SceneState.BuildingMovement) currentLogic = NullMode;
             if (SceneStateController.OldSceneState == SceneState.BuildingMovement && SceneStateController.CurrentSceneState == SceneState.Normal) currentLogic = NormalMode;
-            currentCamera.FirstTouch();
         }
 
 
@@ -64,20 +60,14 @@ namespace CameraBehavior
 
         void NormalMode()
         {
-            if (touchCount != oldTouchCount && touchCount != 0) //при первом нажатии необходимо считать необходимые параметры
-            {
-                currentCamera.FirstTouch();
-                return;
-            }
-
-            if (touchCount == 0 && currentCamera.IsResidual) //остаточное движение
+            if (Input2.TouchCount == 0 && currentCamera.IsResidual) //остаточное движение
             {
 
                 currentCamera.ResidualTransform();
 
             }
 
-            switch (touchCount) //Базовая логика перемещения и вращения камеры
+            switch (Input2.TouchCount) //Базовая логика перемещения и вращения камеры
             {
                 case 1:
                     currentCamera.OneTouchTransform();
@@ -87,7 +77,6 @@ namespace CameraBehavior
                     currentCamera.TwoTouchScale();
                     break;
                 case 3:
-                    break;
                 default:
                     break;
             }
@@ -96,13 +85,7 @@ namespace CameraBehavior
         float localTimer;//может быть стоит вынести из этого класса
         void ExternalMode()
         {
-            if (touchCount != oldTouchCount && touchCount != 0) //при первом нажатии необходимо считать необходимые параметры
-            {
-                currentCamera.FirstTouch();
-                return;
-            }
-
-            switch (touchCount) //Базовая логика перемещения и вращения камеры. обрати внимание, что в первом случае стоит return
+            switch (Input2.TouchCount) //Базовая логика перемещения и вращения камеры. обрати внимание, что в первом случае стоит return
             {
                 case 0:
                     if (currentCamera.IsResidual)
@@ -125,10 +108,7 @@ namespace CameraBehavior
             localTimer = 0f;
         }
 
-        void NullMode()
-        {
-
-        }
+        void NullMode() { }
 
         /// <summary>
         /// При переходе между External и Normal состояниями сцены, необходимо изменить положение камеры и ее функционал

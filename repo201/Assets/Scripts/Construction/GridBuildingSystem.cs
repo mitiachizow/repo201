@@ -22,7 +22,7 @@ namespace ConstructionBehaviour
         SceneStateController stateController;
 
         //private TileBase[] oldBounds;
-        int oldTouchCount, touchCount;
+        //int oldTouchCount, touchCount;
 
         GridLayout gridLayout;
 
@@ -33,7 +33,6 @@ namespace ConstructionBehaviour
         void Start()
         {
             gridLayout = GameObject.Find("Construction Layer").GetComponent<GridLayout>();
-            oldTouchCount = touchCount = 0;
 
             stateController = GameObject.Find("Scene State Controller").GetComponent<SceneStateController>();
             tileStatusMap = GameObject.Find("Tile Status Map").GetComponent<Tilemap>();
@@ -94,24 +93,24 @@ namespace ConstructionBehaviour
         //Добавить обработку на угол
         void Update()
         {
-            oldTouchCount = touchCount;
-            touchCount = Multiplatform.TouchCount;
+            //oldTouchCount = touchCount;
+            //touchCount = Multiplatform.GetTouchCount;
 
             TransformBuilding();
         }
 
         void TransformBuilding()
         {
-            if (touchCount != 1) { isTouchOverBuilding = false; return; }
-            if (Multiplatform.IsPointerOverUI()) return;
+            if (Input2.TouchCount != 1) { isTouchOverBuilding = false; return; }
+            if (Input2.IsPointerOverUI()) return;
 
             if (currentConstruction != null && RayCaster.isHit)
             {
 
-                if (oldTouchCount == 0 && touchCount == 1 && RayCaster.hit.collider.gameObject.name == "Building Prefab")
+                if (Input2.OldTouchCount == 0 && Input2.TouchCount == 1 && RayCaster.hit.collider.gameObject.name == "Building Prefab")
                 { isTouchOverBuilding = true; intermediateBuildingPosition = new Vector2(GameObject.Find("Building Prefab").transform.position.x, GameObject.Find("Building Prefab").transform.position.z); }
 
-                if (isBuildingSelected && oldTouchCount == 1 && touchCount == 0) { intermediateBuildingPosition = new Vector2(GameObject.Find("Building Prefab").transform.position.x, GameObject.Find("Building Prefab").transform.position.z); }
+                if (isBuildingSelected && Input2.OldTouchCount == 1 && Input2.TouchCount == 0) { intermediateBuildingPosition = new Vector2(GameObject.Find("Building Prefab").transform.position.x, GameObject.Find("Building Prefab").transform.position.z); }
                 if (isTouchOverBuilding && isBuildingSelected)
                 {
                     if (SceneStateController.CurrentSceneState == SceneState.Normal) stateController.ChangeSceneState("BuildingMovement");

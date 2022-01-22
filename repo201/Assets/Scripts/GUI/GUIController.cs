@@ -12,29 +12,26 @@ namespace SceneBehavior
     {
         //GameObject confirmButton, canselButton;
 
-        int oldTouchCount, touchCount;
+        //int oldTouchCount, touchCount;
         RaycastHit currentHit, oldHit;
 
         void Start()
         {
             //confirmButton = GameObject.Find("");
-            oldTouchCount = touchCount = 0;
+            //oldTouchCount = touchCount = 0;
         }
 
         void Update()
         {
-            oldTouchCount = touchCount;
-            touchCount = Multiplatform.TouchCount;
-
             if (!RayCaster.isHit) return;
 
-            if (oldTouchCount == 1 && touchCount == 0 && currentHit.collider.gameObject.name == oldHit.collider.gameObject.name) BehaviourLogic();//тут вылезает ошибка регулярно, не очень понятно почему
+            if (Input2.OldTouchCount == 1 && Input2.TouchCount == 0 && currentHit.collider.gameObject.name == oldHit.collider.gameObject.name) BehaviourLogic();//тут вылезает ошибка регулярно, не очень понятно почему
 
-            if (touchCount != 1) return;
+            if (Input2.TouchCount != 1) return;
 
-            if (touchCount == 1 && oldTouchCount == 0) oldHit = RayCaster.hit;
+            if (Input2.TouchCount == 1 && Input2.OldTouchCount == 0) oldHit = RayCaster.hit;
 
-            if (touchCount == 1 && oldTouchCount == 1) currentHit = RayCaster.hit;
+            if (Input2.TouchCount == 1 && Input2.OldTouchCount == 1) currentHit = RayCaster.hit;
         }
 
         void BehaviourLogic()
@@ -57,15 +54,3 @@ namespace SceneBehavior
     }
 
 }
-
-
-
-//                case "Button Yes":
-//                    GameObject.Find("Construction Controller").GetComponent<GridBuildingSystem>().AddNewConstruction();
-//gameObject.transform.parent.transform.parent.Find("UI").gameObject.SetActive(false);
-//break;
-//                case "Button No":
-//                    GameObject.Destroy(gameObject.transform.parent.transform.parent.gameObject);
-//GameObject.Find("Construction Controller").GetComponent<GridBuildingSystem>().CanselInstantiateConstruction();
-//break;
-

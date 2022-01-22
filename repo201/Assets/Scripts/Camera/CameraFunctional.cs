@@ -58,19 +58,11 @@ namespace CameraBehavior
                             {
                                 float localAngle = Vector3.SignedAngle(globalAnchor.position - cameraTransform.position, cameraTransform.parent.gameObject.transform.forward, Vector3.up); //вот тут очень много ресурсов ем, нужно вынести или не нужно?
 
-                                newCamValue.x = Mathf.Clamp(value.x, currentRadius * Mathf.Sin(localAngle * Mathf.PI / 180f) + globalAnchor.position.x < 0f ?
-                                                                     currentRadius * Mathf.Sin(localAngle * Mathf.PI / 180f) + globalAnchor.position.x :
-                                                                   -(currentRadius * Mathf.Sin(localAngle * Mathf.PI / 180f) + globalAnchor.position.x),
-                                                                    (currentRadius * Mathf.Sin(localAngle * Mathf.PI / 180f) + globalAnchor.position.x) > 0f ?
-                                                                    (currentRadius * Mathf.Sin(localAngle * Mathf.PI / 180f) + globalAnchor.position.x) :
-                                                                   -(currentRadius * Mathf.Sin(localAngle * Mathf.PI / 180f) + globalAnchor.position.x));
+                                float xPosition = currentRadius * Mathf.Sin(localAngle * Mathf.PI / 180f) + globalAnchor.position.x;
+                                float zPosition = currentRadius * Mathf.Cos((localAngle - 180f) * Mathf.PI / 180f) + globalAnchor.position.z;
 
-                                newCamValue.z = Mathf.Clamp(value.z, currentRadius * Mathf.Cos((localAngle - 180f) * Mathf.PI / 180f) + globalAnchor.position.z < 0f ?
-                                                                     currentRadius * Mathf.Cos((localAngle - 180f) * Mathf.PI / 180f) + globalAnchor.position.z :
-                                                                   -(currentRadius * Mathf.Cos((localAngle - 180f) * Mathf.PI / 180f) + globalAnchor.position.z),
-                                                                    (currentRadius * Mathf.Cos((localAngle - 180f) * Mathf.PI / 180f) + globalAnchor.position.z) > 0f ?
-                                                                    (currentRadius * Mathf.Cos((localAngle - 180f) * Mathf.PI / 180f) + globalAnchor.position.z) :
-                                                                   -(currentRadius * Mathf.Cos((localAngle - 180f) * Mathf.PI / 180f) + globalAnchor.position.z));
+                                newCamValue.x = Mathf.Clamp(value.x, xPosition < 0f ? xPosition : -xPosition, xPosition > 0f ? xPosition : -xPosition);
+                                newCamValue.z = Mathf.Clamp(value.z, zPosition < 0f ? zPosition : -zPosition, zPosition > 0f ? zPosition : -zPosition);
 
                                 residualSpeedTransform = new Vector3(-newCamValue.x, residualSpeedTransform.y, -newCamValue.z);
                             }
@@ -87,8 +79,6 @@ namespace CameraBehavior
 
         public bool IsResidual { get; private set; }
 
-        Vector2 firstTouchPosition, secondTouchPosition, thirdTouchPosition;
-
         /// <summary>
         /// Остаточная скорость движения. После прекращения передвижения камеры остается инерция, которая продолжает некоторое время перемещать камеру
         /// </summary>
@@ -96,27 +86,18 @@ namespace CameraBehavior
 
         public void OneTouchTransform()
         {
-            float zDeltaPosition = firstTouchPosition.y - Multiplatform.TouchPosition(0).y;
-            float xDeltaPosition = firstTouchPosition.x - Multiplatform.TouchPosition(0).x;
-
-            float zLocalPosition = zDeltaPosition;
-            float xLocalPosition = xDeltaPosition;
-
             float rad = (cameraTransform.rotation.eulerAngles.y * Mathf.PI) / 180f;
 
             float speed = 2f;
 
-            zDeltaPosition = ((zLocalPosition * Mathf.Cos(rad)) - (xLocalPosition * Mathf.Sin(rad)))* speed;
-            xDeltaPosition = ((xLocalPosition * Mathf.Cos(rad)) + (zLocalPosition * Mathf.Sin(rad)))* speed;
+            float zDeltaPosition = ((Input2.DeltaPosition[0].y * Mathf.Cos(rad)) - (Input2.DeltaPosition[0].x * Mathf.Sin(rad))) * speed;
+            float xDeltaPosition = ((Input2.DeltaPosition[0].x * Mathf.Cos(rad)) + (Input2.DeltaPosition[0].y * Mathf.Sin(rad))) * speed;
 
             Vector3 newPosition;
 
-            newPosition.x = CameraPosition.x + xDeltaPosition*Time.deltaTime;
+            newPosition.x = CameraPosition.x + xDeltaPosition * Time.deltaTime;
             newPosition.y = CameraPosition.y;
             newPosition.z = CameraPosition.z + zDeltaPosition * Time.deltaTime;
-
-            firstTouchPosition.y = Multiplatform.TouchPosition(0).y;
-            firstTouchPosition.x = Multiplatform.TouchPosition(0).x;
 
             CameraPosition = newPosition;
 
@@ -178,37 +159,23 @@ namespace CameraBehavior
 
         public void TwoTouchRotate()
         {
-            if (Multiplatform.сurrentPlatform == Platform.Pc) TwoTouchRotatePc();
-            else if (Multiplatform.сurrentPlatform == Platform.Android) TwoTouchRotateAndroid();
+            if (Input2.CurrentPlatform == Platform.Pc) TwoTouchRotatePc();
+            else if (Input2.CurrentPlatform == Platform.Android) TwoTouchRotateAndroid();
 
             void TwoTouchRotateAndroid()
             {
-                float firstDeltaPosition = Input.GetTouch(0).deltaPosition.y;
-                float secondDeltaPosition = Input.GetTouch(1).deltaPosition.y;
-
-                if ((Input.GetTouch(0).position.x > Input.GetTouch(1).position.x) && ((firstDeltaPosition > 0 && secondDeltaPosition < 0.2f) || (firstDeltaPosition < 0 && secondDeltaPosition > -0.2f)))
-                {
-                    RotateLogic((firstDeltaPosition - secondDeltaPosition), cameraAnchor, localCamRadius);
-                    return;
-                }
-                else if ((Input.GetTouch(0).position.x < Input.GetTouch(1).position.x) && ((firstDeltaPosition > 0 && secondDeltaPosition < 0.2f) || (firstDeltaPosition < 0 && secondDeltaPosition > -0.2f)))/* if (Input.GetTouch(0).position.y < Input.GetTouch(1).position.y) // не обязательное условие*/
-                {
-
-                    RotateLogic((secondDeltaPosition - firstDeltaPosition), cameraAnchor, localCamRadius);
-                    return;
-                }
+                RotateLogic((Input2.DeltaPosition[0].y - Input2.DeltaPosition[1].y), cameraAnchor, localCamRadius);
             }
+
             void TwoTouchRotatePc()
             {
-                float deltaPosition = Input.mousePosition.x - firstTouchPosition.x;
-                RotateLogic(deltaPosition, cameraAnchor, localCamRadius);
-                firstTouchPosition = Input.mousePosition;
+                RotateLogic(-Input2.DeltaPosition[0].x, cameraAnchor, localCamRadius);
             }
         }
 
 
         /// <summary>
-        /// Угол вращения камеры вокруг оси Y
+        /// Угол вращения камеры вокруг вертикальной оси
         /// </summary>
         float angleRotate;
 
@@ -231,64 +198,30 @@ namespace CameraBehavior
 
             cameraTransform.rotation = Quaternion.Euler(cameraTransform.rotation.eulerAngles.x, -angleRotate, cameraTransform.rotation.eulerAngles.z);
         }
-        public void FirstTouch()
-        {
-            int touchCount = Multiplatform.TouchCount;
-            switch (touchCount)
-            {
-                case 1:
-                    firstTouchPosition = Multiplatform.TouchPosition(0);
-                    break;
-                case 2:
-                    firstTouchPosition = Multiplatform.TouchPosition(0);
-                    secondTouchPosition = Multiplatform.TouchPosition(1);
 
-                    oldScaleDistance = Vector2.Distance(secondTouchPosition, firstTouchPosition);
-                    break;
-                default:
-                    break;
-            }
-
-            residualSpeedRotate = 0f;
-        }
-
-        float oldScaleDistance;
-
-        float FindRadius(Transform anchor) => Vector2.Distance(new Vector2(cameraTransform.position.x, cameraTransform.position.z), new Vector2(anchor.position.x, anchor.position.z)); //Почему паблик?
+        float FindRadius(Transform anchor) => Vector2.Distance(new Vector2(cameraTransform.position.x, cameraTransform.position.z), new Vector2(anchor.position.x, anchor.position.z));
         public void TwoTouchScale()
         {
-            if (Multiplatform.сurrentPlatform == Platform.Pc) TwoTouchScalePC();
-            else if (Multiplatform.сurrentPlatform == Platform.Android) TwoTouchScaleAndroid();
+            if (Input2.CurrentPlatform == Platform.Pc) TwoTouchScalePC();
+            else if (Input2.CurrentPlatform == Platform.Android) TwoTouchScaleAndroid();
 
             void TwoTouchScalePC()
             {
-                float deltaPosition = Input.mousePosition.y - secondTouchPosition.y;
-
                 Vector3 scaleStorage;
 
-                scaleStorage.y = CameraPosition.y + deltaPosition * Time.deltaTime;
+                scaleStorage.y = CameraPosition.y + Input2.DeltaPosition[1].y * Time.deltaTime;
                 scaleStorage.x = CameraPosition.x;
                 scaleStorage.z = CameraPosition.z;
 
                 CameraPosition = scaleStorage;
-
-                secondTouchPosition = Input.mousePosition;
-
             }
             void TwoTouchScaleAndroid()
             {
-                firstTouchPosition = Input.GetTouch(0).position;
-                secondTouchPosition = Input.GetTouch(1).position;
-
-                float scaleDistance = Vector2.Distance(secondTouchPosition, firstTouchPosition);
-                float currentChangeDistance = oldScaleDistance - scaleDistance;
-
-                oldScaleDistance = scaleDistance;
-                float yPosition = currentChangeDistance;
+                float scaleDistance = (Input2.CurrentTouchPosition[0].x - Input2.CurrentTouchPosition[1].x) - (Input2.OldTouchPosition[0].x - Input2.OldTouchPosition[1].x);
 
                 Vector3 scaleStorage;
 
-                scaleStorage.y = CameraPosition.y + yPosition * Time.deltaTime;
+                scaleStorage.y = CameraPosition.y + scaleDistance * Time.deltaTime;
                 scaleStorage.x = CameraPosition.x;
                 scaleStorage.z = CameraPosition.z;
 
@@ -297,18 +230,15 @@ namespace CameraBehavior
         }
         public void OneTouchRotate()
         {
-            float deltaPosition = (firstTouchPosition.x - Multiplatform.TouchPosition(0).x);
+            float multiplier = 0.5f;
 
-            float multiplier = 0.01f; //Change this one, to change speed of manual rotate???это тут вообще нужно?
-
-            RotateLogic(deltaPosition * multiplier, globalAnchor, currentRadius);
-
+            RotateLogic(Input2.DeltaPosition[0].x * multiplier, globalAnchor, currentRadius);
 
             ResidualSpeedRotateCalculate();
 
             void ResidualSpeedRotateCalculate()
             {
-                residualSpeedRotate = (residualSpeedRotate + deltaPosition * Time.deltaTime) / 2.5f;
+                residualSpeedRotate = (residualSpeedRotate + Input2.DeltaPosition[0].x) / 2.5f;
                 IsResidual = true;
             }
         }
@@ -346,9 +276,7 @@ namespace CameraBehavior
 
             void CleanParams()
             {
-                oldScaleDistance = 0f;
                 residualSpeedRotate = 0f;
-                firstTouchPosition = secondTouchPosition = thirdTouchPosition = new Vector3(0f, 0f);
                 residualSpeedTransform = new Vector3(0f, 0f, 0f);
                 IsResidual = false;
                 safeChangeScale = 0f;
