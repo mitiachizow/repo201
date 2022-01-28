@@ -13,7 +13,7 @@ namespace SceneBehavior
             canvasState1.SetActive(true);
             canvasState2.SetActive(false);
             canvasState3.SetActive(false);
-            GameObject.Find("Scene State Controller").GetComponent<SceneStateController>().AddHandler(ChangeCanvasState);
+            SceneStateController.AddHandler(ChangeCanvasState);
         }
 
         void ChangeCanvasState()
@@ -27,6 +27,11 @@ namespace SceneBehavior
                     break;
                 case SceneState.Normal:
                     canvasState1.SetActive(true);
+                    canvasState2.SetActive(false);
+                    canvasState3.SetActive(false);
+                    break;
+                case SceneState.NormalBuildingSelected:
+                    canvasState1.SetActive(false);
                     canvasState2.SetActive(false);
                     canvasState3.SetActive(false);
                     break;

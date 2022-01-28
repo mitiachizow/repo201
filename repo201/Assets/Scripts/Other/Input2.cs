@@ -13,13 +13,13 @@ namespace SceneBehavior
     /// </summary>
     public class Input2 : MonoBehaviour
     {
-        public static Platform CurrentPlatform { get; private set; }
+        public static Platform CurrentPlatform { get; private set; } //Вынести platform в отдельный класс
         public static int OldTouchCount { get; private set; }
         public static int TouchCount { get; private set; }
 
         public void Start()
         {
-            CurrentPlatform = Platform.Android;
+            CurrentPlatform = Platform.Pc;
 
             OldTouchCount = TouchCount = 0;
 
@@ -89,6 +89,7 @@ namespace SceneBehavior
                     case 0:
                         return new Vector2[] { default, default };
                     case 1:
+                        //if (OldTouchPosition[0] == default) return default;
                         return new Vector2[] { OldTouchPosition[0] - CurrentTouchPosition[0], default };
                     case 2:
                         return new Vector2[] { OldTouchPosition[0] - CurrentTouchPosition[0], OldTouchPosition[1] - CurrentTouchPosition[1] };

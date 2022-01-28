@@ -2,16 +2,16 @@ ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
     - CameraBehavior.CameraLogic
+    - ConstructionBehaviour.BuildingSystem
     - ConstructionBehaviour.ConstructionController
-    - ConstructionBehaviour.GridBuildingSystem
     - DELETE_KILL
     - FPSC
     - GlobalPredictor.GlobalPredictor
     - SceneBehavior.CanvasController
-    - SceneBehavior.GUIController
-    - SceneBehavior.GUITransformController
+    - SceneBehavior.GUITransform
+    - SceneBehavior.Input2
     - SceneBehavior.RayCaster
-    - SceneBehavior.SceneStateController
+    - SceneBehavior.RayCasterHandler
     Unity.2D.Tilemap.Editor.dll:
     - UnityEditor.Tilemaps.GridPaintingState
     - UnityEditor.Tilemaps.GridPaletteBrushes
@@ -59,8 +59,6 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 48
       Script: {instanceID: 0}
-    - Class: 64
-      Script: {instanceID: 0}
     - Class: 65
       Script: {instanceID: 0}
     - Class: 81
@@ -70,53 +68,53 @@ ScriptsOnlyBuild:
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 610}
+      Script: {instanceID: 614}
     - Class: 114
-      Script: {instanceID: 1480}
+      Script: {instanceID: 1486}
     - Class: 114
-      Script: {instanceID: 1632}
+      Script: {instanceID: 1638}
     - Class: 114
-      Script: {instanceID: 1976}
+      Script: {instanceID: 1982}
     - Class: 114
-      Script: {instanceID: 2104}
+      Script: {instanceID: 2110}
     - Class: 114
-      Script: {instanceID: 2274}
+      Script: {instanceID: 2282}
     - Class: 114
-      Script: {instanceID: 2378}
+      Script: {instanceID: 2386}
     - Class: 114
-      Script: {instanceID: 2484}
+      Script: {instanceID: 2492}
     - Class: 114
-      Script: {instanceID: 2540}
+      Script: {instanceID: 2548}
     - Class: 114
-      Script: {instanceID: 2560}
+      Script: {instanceID: 2568}
     - Class: 114
-      Script: {instanceID: 2626}
+      Script: {instanceID: 2634}
     - Class: 114
-      Script: {instanceID: 2652}
+      Script: {instanceID: 2660}
     - Class: 114
-      Script: {instanceID: 2704}
+      Script: {instanceID: 2750}
     - Class: 114
-      Script: {instanceID: 2742}
+      Script: {instanceID: 2770}
     - Class: 114
-      Script: {instanceID: 2762}
+      Script: {instanceID: 2832}
     - Class: 114
-      Script: {instanceID: 2824}
+      Script: {instanceID: 2884}
     - Class: 114
-      Script: {instanceID: 2876}
+      Script: {instanceID: 2992}
     - Class: 114
-      Script: {instanceID: 2984}
+      Script: {instanceID: 3012}
     - Class: 114
-      Script: {instanceID: 3004}
+      Script: {instanceID: 3102}
     - Class: 114
-      Script: {instanceID: 3094}
+      Script: {instanceID: 3538}
     - Class: 114
-      Script: {instanceID: 3530}
+      Script: {instanceID: 3666}
     - Class: 114
-      Script: {instanceID: 3658}
+      Script: {instanceID: 4136}
     - Class: 114
-      Script: {instanceID: 4252}
+      Script: {instanceID: 4260}
     - Class: 114
-      Script: {instanceID: 4368}
+      Script: {instanceID: 4376}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -137,11 +135,13 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 156049354
       Script: {instanceID: 0}
-    - Class: 483693784
-      Script: {instanceID: 0}
-    - Class: 1839735485
-      Script: {instanceID: 0}
   scriptHashData:
+  - hash:
+      serializedVersion: 2
+      Hash: ff7f58b226cfe4de0dc241bd88d5a904
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Outline
   - hash:
       serializedVersion: 2
       Hash: 5ab533713adae59372fb3e10a585c186
@@ -315,7 +315,7 @@ ScriptsOnlyBuild:
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Assembly-CSharp.dll
     namespaceName: SceneBehavior
-    className: GUIController
+    className: RayCasterHandler
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
@@ -378,12 +378,6 @@ ScriptsOnlyBuild:
     className: DELETE_KILL
   - hash:
       serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: SceneBehavior
-    className: SceneStateController
-  - hash:
-      serializedVersion: 2
       Hash: 748dd2a2a28da4e618912da5ac45684b
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.EventSystems
@@ -441,7 +435,7 @@ ScriptsOnlyBuild:
       Hash: 82fc6737ae01e76c51dafecafbac6d9e
     assemblyName: Assembly-CSharp.dll
     namespaceName: ConstructionBehaviour
-    className: GridBuildingSystem
+    className: BuildingSystem
   - hash:
       serializedVersion: 2
       Hash: 4fd8bf02e3089425d3502e26c44ba31a
@@ -669,7 +663,13 @@ ScriptsOnlyBuild:
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Assembly-CSharp.dll
     namespaceName: SceneBehavior
-    className: GUITransformController
+    className: Input2
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: SceneBehavior
+    className: GUITransform
   - hash:
       serializedVersion: 2
       Hash: 8220b46879dc5e37db1b940c938f5744
@@ -700,7 +700,13 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.EventSystems
     className: TouchInputModule
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: outTest1
   platform: 13
   scenePathNames:
   - Assets/Scenes/Playground.unity
-  playerPath: "Q:/Smol Town/\u0432\u0440\u0435\u043C\u0435\u043D\u043D\u043E\u0435/12.apk"
+  playerPath: "Q:/Smol Town/\u0432\u0440\u0435\u043C\u0435\u043D\u043D\u043E\u0435/13.apk"

@@ -31,10 +31,10 @@ namespace CameraBehavior
         void Start()
         {
             currentLogic = NormalMode;
-            GameObject.Find("Scene State Controller").GetComponent<SceneStateController>().AddHandler(ChangeCamLogic);
+            SceneStateController.AddHandler(ChangeCamLogic);
 
             currentCamera = new CameraFunctional(Camera.main.transform, Camera.main.transform.Find("Camera Anchor"), GameObject.Find("Global Anchor").transform,
-                minNormalCircleHeigh: 15f, midNormalCircleHeigh: 30f, maxNormalCircleHeigh: 50f, externalCircleHeigh: 120f, normalCircleRadius: 350f, externalCircleRadius: 400f);
+                minNormalCircleHeigh: 50f, midNormalCircleHeigh: 70f, maxNormalCircleHeigh: 100f, externalCircleHeigh: 160f, normalCircleRadius: 250f, externalCircleRadius: 400f);
         }
 
         void Update()
@@ -51,8 +51,8 @@ namespace CameraBehavior
                 currentCamera.GetFinalPoint(SceneStateController.CurrentSceneState);
             }
 
-            if (SceneStateController.CurrentSceneState == SceneState.BuildingMovement) currentLogic = NullMode;
-            if (SceneStateController.OldSceneState == SceneState.BuildingMovement && SceneStateController.CurrentSceneState == SceneState.Normal) currentLogic = NormalMode;
+            if (SceneStateController.CurrentSceneState == SceneState.NormalBuildingSelected) currentLogic = NullMode;
+            if (SceneStateController.OldSceneState == SceneState.NormalBuildingSelected && SceneStateController.CurrentSceneState == SceneState.Normal) currentLogic = NormalMode;
         }
 
 
