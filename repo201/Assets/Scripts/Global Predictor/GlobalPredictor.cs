@@ -32,6 +32,13 @@ namespace GlobalPredictor
             economic.Calculate();
             events.Calculate();
         }
+
+        public void AddBuilding()
+        {
+            //economic.add
+            //population.add
+            //etc
+        }
     }
 
 }

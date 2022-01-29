@@ -6,8 +6,8 @@ namespace ConstructionBehaviour
 {
     public enum ConstructionType
     {
-        Factory,
-        Apartment
+        Factory= 0,
+        Apartment =1
     }
 
 }

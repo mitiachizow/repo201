@@ -35,6 +35,7 @@ namespace SceneBehavior
                     else if (SceneStateController.CurrentSceneState == SceneState.Normal) SceneStateController.ChangeSceneState(SceneState.External);
                     break;
                 case "Button Confirm":
+                    GameObject.Destroy(GameObject.Find("Building Prefab").GetComponent<TransformBuilding>());
                     GameObject.Find("Construction Controller").GetComponent<BuildingSystem>().AddConstruction();
                     GameObject.Find("GUI Controller").GetComponent<GUITransform>().StopTransformGUI();
                     break;
@@ -42,7 +43,7 @@ namespace SceneBehavior
                     GameObject.Find("Construction Controller").GetComponent<BuildingSystem>().CanselInstantiateConstruction();
                     break;
                 case "Building Prefab":
-                    GameObject.Find("Construction Controller").GetComponent<BuildingSystem>().isBuildingSelected = true;
+                    GameObject.Find("Building Prefab").GetComponent<TransformBuilding>().isBuildingSelected = true;
 
                     currentHit.collider.gameObject.GetComponent<Outline>().enabled = true;
                     break;
@@ -61,7 +62,7 @@ namespace SceneBehavior
                     GameObject.Find("Construction Controller").GetComponent<BuildingSystem>().InstantiateConstruction(type);
                     GameObject.Find("Building Prefab").AddComponent<Outline>();
 
-                    GameObject.Find("Construction Controller").GetComponent<BuildingSystem>().isBuildingSelected = true;
+                    GameObject.Find("Building Prefab").GetComponent<TransformBuilding>().isBuildingSelected = true;
 
                     GameObject.Find("Building Prefab").GetComponent<Outline>().enabled = true;
                     GameObject.Find("Building Prefab").GetComponent<Outline>().OutlineWidth = 10;
@@ -71,10 +72,11 @@ namespace SceneBehavior
                 }
                 else
                 {
-                    GameObject.Find("Construction Controller").GetComponent<BuildingSystem>().isBuildingSelected = true;
-
+                    GameObject.Find("Building Prefab").GetComponent<TransformBuilding>().isBuildingSelected = true;
                     GameObject.Find("Construction Controller").GetComponent<BuildingSystem>().InstantiateConstruction(type);
                 }
+
+                GameObject.Find("Building Prefab").GetComponent<TransformBuilding>().SetValues();
             }
 
             ConstructionType StringToConstructionType(string type)
