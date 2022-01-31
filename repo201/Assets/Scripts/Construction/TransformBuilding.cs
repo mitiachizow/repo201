@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SceneBehavior;
+using ConstructionBehaviour;
 
 public class TransformBuilding : MonoBehaviour
 {
@@ -9,11 +10,13 @@ public class TransformBuilding : MonoBehaviour
     BoxCollider boxCollider;
     GridLayout gridLayout;
     float yBuildingPos;
+    GridController grid;
 
 
     void Start()
     {
-        gridLayout = GameObject.Find("Construction Controller").GetComponent<GridLayout>();
+        grid = GameObject.Find("Grid Controller").GetComponent<GridController>();
+        gridLayout = GameObject.Find("Grid Controller").GetComponent<GridLayout>();
 
         Vector3Int cellPos = gridLayout.LocalToCell(new Vector3(gameObject.transform.position.x, gameObject.transform.Find("3D Model").transform.localScale.y / 2, gameObject.transform.position.z));
         gameObject.transform.position = gridLayout.CellToLocal(cellPos);
@@ -60,7 +63,16 @@ public class TransformBuilding : MonoBehaviour
 
             Vector3Int cellPos = gridLayout.LocalToCell(new Vector3(RayCaster.hit.point.x, yBuildingPos, RayCaster.hit.point.z));
 
-            gameObject.transform.position = gridLayout.CellToLocal(cellPos);
+            Vector3 value = gridLayout.CellToLocal(cellPos);
+
+            if (grid.gridPool[new Vector2Int((int)value.x, (int)value.z)] == GridController.GridCellStatus.Busy) return;
+
+            gameObject.transform.position = value;
         }
     }
+
+    //private void CheckCell(Vector2Int cellPos)
+    //{
+    //    if (grid.gridPool[cellPos] == GridController.GridCellStatus.Busy)
+    //}
 }

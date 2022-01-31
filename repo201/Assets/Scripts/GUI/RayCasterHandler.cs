@@ -37,7 +37,7 @@ namespace SceneBehavior
                 case "Button Confirm":
                     GameObject.Destroy(GameObject.Find("Building Prefab").GetComponent<TransformBuilding>());
                     GameObject.Find("Construction Controller").GetComponent<BuildingSystem>().AddConstruction();
-                    GameObject.Find("GUI Controller").GetComponent<GUITransform>().StopTransformGUI();
+                    GameObject.Find("GUI Pool").GetComponent<GUITransform>().StopTransformGUI();
                     break;
                 case "Button Cansel":
                     GameObject.Find("Construction Controller").GetComponent<BuildingSystem>().CanselInstantiateConstruction();
@@ -51,11 +51,14 @@ namespace SceneBehavior
                 case "Apartment Button":
                     ButtonPrefab(StringToConstructionType(currentHit.collider.gameObject.name));
                     break;
+                case "Add Land Cell Button":
+                    GameObject.Find("Land Controller").GetComponent<LandController>().AddCell();
+                    break;
                 default:
                     break;
             }
 
-            void ButtonPrefab(ConstructionType type)
+            void ButtonPrefab(BuildingType type)
             {
                 if (GameObject.Find("Building Prefab") == null)
                 {
@@ -68,7 +71,7 @@ namespace SceneBehavior
                     GameObject.Find("Building Prefab").GetComponent<Outline>().OutlineWidth = 10;
                     GameObject.Find("Building Prefab").GetComponent<Outline>().OutlineMode = Outline.Mode.OutlineAll;
 
-                    GameObject.Find("GUI Controller").GetComponent<GUITransform>().InstantiateButtons();
+                    GameObject.Find("GUI Pool").GetComponent<GUITransform>().InstantiateButtons();
                 }
                 else
                 {
@@ -79,14 +82,14 @@ namespace SceneBehavior
                 GameObject.Find("Building Prefab").GetComponent<TransformBuilding>().SetValues();
             }
 
-            ConstructionType StringToConstructionType(string type)
+            BuildingType StringToConstructionType(string type)
             {
                 switch (type)
                 {
                     case "Factory Button":
-                        return ConstructionType.Factory;
+                        return BuildingType.Factory;
                     case "Apartment Button":
-                        return ConstructionType.Apartment;
+                        return BuildingType.Apartment;
                 }
                 throw new Exception("There are no such a building");
             }

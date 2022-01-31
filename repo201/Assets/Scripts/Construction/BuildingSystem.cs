@@ -11,14 +11,16 @@ namespace ConstructionBehaviour
     {
 
         Building currentConstruction;
-
+        //GridPool grid;
+        //LandController land;
 
         void Start()
         {
+            //grid = GridPool.get
             SceneStateController.AddHandler(Clean);
         }
 
-        public void InstantiateConstruction(ConstructionType constructionType)
+        public void InstantiateConstruction(BuildingType constructionType)
         {
             if (currentConstruction == null)
             {
@@ -31,7 +33,7 @@ namespace ConstructionBehaviour
         }
         public void CanselInstantiateConstruction()
         {
-            GameObject.Find("GUI Controller").GetComponent<GUITransform>().StopTransformGUI();
+            GameObject.Find("GUI Pool").GetComponent<GUITransform>().StopTransformGUI();
             currentConstruction.Destroy();
             currentConstruction = null;
         }

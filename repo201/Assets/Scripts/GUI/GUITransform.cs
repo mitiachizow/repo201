@@ -50,8 +50,8 @@ namespace SceneBehavior
             {
                 ButtonCansel.transform.eulerAngles = new Vector3(-80, Camera.main.transform.eulerAngles.y, 0);
                 ButtonConfirm.transform.eulerAngles = new Vector3(-80, Camera.main.transform.eulerAngles.y, 0);
-                ButtonCansel.transform.position = FindButtonPosition(20f);
-                ButtonConfirm.transform.position = FindButtonPosition(-20f);
+                ButtonCansel.transform.position = FindGUIButtonPosition(20f);
+                ButtonConfirm.transform.position = FindGUIButtonPosition(-20f);
                 yield return null;
             }
 
@@ -76,7 +76,7 @@ namespace SceneBehavior
             }
         }
 
-        public Vector3 FindButtonPosition(float additionalAngle)
+        Vector3 FindGUIButtonPosition(float additionalAngle)
         {
             float angleRotate = Mathf.Atan2(Camera.main.transform.position.x - transformAnchor.position.x,
                 Camera.main.transform.position.z - transformAnchor.position.z) * Mathf.Rad2Deg + additionalAngle;
@@ -86,8 +86,6 @@ namespace SceneBehavior
 
             return new Vector3(xPosition, 13f, zPosition);
         }
-
-
     }
 
 }
