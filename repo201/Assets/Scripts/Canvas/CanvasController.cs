@@ -6,13 +6,15 @@ namespace SceneBehavior
 {
     public class CanvasController : MonoBehaviour
     {
-        public GameObject canvasState1, canvasState2, canvasState3;
+        [SerializeField]
+        private GameObject scrollView, buildingInfo, SceneStateSwitcher, addLandButton;
 
         void Start()
         {
-            canvasState1.SetActive(true);
-            canvasState2.SetActive(false);
-            canvasState3.SetActive(false);
+            scrollView.SetActive(true);
+            buildingInfo.SetActive(false);
+            SceneStateSwitcher.SetActive(true);
+            addLandButton.SetActive(false);
             SceneStateController.AddHandler(ChangeCanvasState);
         }
 
@@ -21,20 +23,23 @@ namespace SceneBehavior
             switch (SceneStateController.CurrentSceneState)
             {
                 case SceneState.External:
-                    canvasState1.SetActive(false);
-                    canvasState2.SetActive(true);
-                    canvasState3.SetActive(false);
+                    scrollView.SetActive(false);
+                    buildingInfo.SetActive(false);
+                    SceneStateSwitcher.SetActive(true);
+                    addLandButton.SetActive(false);
                     break;
                 case SceneState.Normal:
-                    canvasState1.SetActive(true);
-                    canvasState2.SetActive(false);
-                    canvasState3.SetActive(false);
+                    scrollView.SetActive(true);
+                    buildingInfo.SetActive(true);
+                    SceneStateSwitcher.SetActive(true);
+                    addLandButton.SetActive(false);
                     break;
-                case SceneState.NormalBuildingSelected:
-                    canvasState1.SetActive(false);
-                    canvasState2.SetActive(false);
-                    canvasState3.SetActive(false);
-                    break;
+                //case SceneState.NormalBuildingSelected:
+                //    scrollView.SetActive(false);
+                //    buildingInfo.SetActive(false);
+                //    changeViewButton.SetActive(false);
+                //    addLandButton.SetActive(false);
+                //    break;
             }
         }
     }

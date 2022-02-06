@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using SceneBehavior;
-using System;
 
 
 namespace CameraBehavior
@@ -13,7 +10,7 @@ namespace CameraBehavior
         readonly float minNormalCircleHeigh, midNormalCircleHeigh, maxNormalCircleHeigh, externalCircleHeigh, externalCircleRadius, normalCircleRadius;
         float currentRadius, localCamRadius;
 
-        public CameraFunctional(Transform cameraTransform, Transform cameraAnchor, Transform globalAnchor, float minNormalCircleHeigh, float midNormalCircleHeigh, float maxNormalCircleHeigh,
+        public CameraFunctional(UnityEngine.Transform cameraTransform, UnityEngine.Transform cameraAnchor, UnityEngine.Transform globalAnchor, float minNormalCircleHeigh, float midNormalCircleHeigh, float maxNormalCircleHeigh,
             float externalCircleHeigh, float externalCircleRadius, float normalCircleRadius)
         {
             this.cameraTransform = cameraTransform;
@@ -41,6 +38,7 @@ namespace CameraBehavior
             {
                 switch (SceneStateController.CurrentSceneState)
                 {
+                    case SceneState.Building:
                     case SceneState.Normal:
                         {
                             Vector3 newCamValue;
@@ -179,7 +177,7 @@ namespace CameraBehavior
         /// </summary>
         float angleRotate;
 
-        void RotateLogic(float xDeltaPosition, Transform anchor, float radius)
+        void RotateLogic(float xDeltaPosition, UnityEngine.Transform anchor, float radius)
         {
             float speedRotate = 5f;
 
@@ -199,7 +197,7 @@ namespace CameraBehavior
             cameraTransform.rotation = Quaternion.Euler(cameraTransform.rotation.eulerAngles.x, -angleRotate, cameraTransform.rotation.eulerAngles.z);
         }
 
-        float FindRadius(Transform anchor) => Vector2.Distance(new Vector2(cameraTransform.position.x, cameraTransform.position.z), new Vector2(anchor.position.x, anchor.position.z));
+        float FindRadius(UnityEngine.Transform anchor) => Vector2.Distance(new Vector2(cameraTransform.position.x, cameraTransform.position.z), new Vector2(anchor.position.x, anchor.position.z));
         public void TwoTouchScale()
         {
             if (Input2.CurrentPlatform == Platform.Pc) TwoTouchScalePC();
@@ -254,6 +252,7 @@ namespace CameraBehavior
 
             switch (sceneState)
             {
+                case SceneState.Building:
                 case SceneState.Normal:
                     height = midNormalCircleHeigh;
                     currentRadius = normalCircleRadius;
@@ -322,6 +321,17 @@ namespace CameraBehavior
             float speedRotate = automaticSpeed * (Mathf.Clamp(timer, 0f, maxSpeed) / 10f);
 
             RotateLogic(speedRotate, globalAnchor, currentRadius);
+        }
+
+        /// <summary>
+        /// Set all params default(null) values
+        /// </summary>
+        public void SetNull()
+        {
+            IsResidual = false;
+            residualSpeedTransform = new Vector3(0f, 0f, 0f);
+            residualSpeedRotate = 0f;
+
         }
     }
 }

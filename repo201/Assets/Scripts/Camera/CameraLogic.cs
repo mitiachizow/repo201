@@ -51,8 +51,28 @@ namespace CameraBehavior
                 currentCamera.GetFinalPoint(SceneStateController.CurrentSceneState);
             }
 
-            if (SceneStateController.CurrentSceneState == SceneState.NormalBuildingSelected) currentLogic = NullMode;
-            if (SceneStateController.OldSceneState == SceneState.NormalBuildingSelected && SceneStateController.CurrentSceneState == SceneState.Normal) currentLogic = NormalMode;
+            //if (SceneStateController.CurrentSceneState == SceneState.BuildingTransform) currentLogic = NullMode;
+            //if (SceneStateController.OldSceneState == SceneState.BuildingTransform && SceneStateController.CurrentSceneState == SceneState.Building) currentLogic = NormalMode;
+        }
+
+        
+        /// <summary>
+        /// It can break cam logic, use it carefully. (never use it (no , rl, NEVER))
+        /// </summary>
+        /// <param name="state"></param>
+        public void ForcedChangeCamLogic(SceneState state)
+        {
+            switch (state)
+            {
+                case SceneState.Normal:
+                case SceneState.Building:
+                    currentLogic = NormalMode;
+                    break;
+                case SceneState.Default:
+                    currentLogic = NullMode;
+                    break;
+            }
+            currentCamera.SetNull();
         }
 
 
@@ -62,9 +82,7 @@ namespace CameraBehavior
         {
             if (Input2.TouchCount == 0 && currentCamera.IsResidual) //остаточное движение
             {
-
                 currentCamera.ResidualTransform();
-
             }
 
             switch (Input2.TouchCount) //Базовая логика перемещения и вращения камеры
@@ -122,6 +140,7 @@ namespace CameraBehavior
                     case SceneState.External:
                         currentLogic = ExternalMode;
                         break;
+                    case SceneState.Building:
                     case SceneState.Normal:
                         currentLogic = NormalMode;
                         break;
