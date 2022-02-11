@@ -2,9 +2,11 @@
 //using System.Collections.Generic;
 //using UnityEngine;
 
+//namespace ConstructionBehaviour
+//{
 //public class Factory : Construction
 //{
-//    public Factory():base()
+//    public Factory() : base()
 //    public override void ShowInfo()
 //    {
 //        throw new System.NotImplementedException();
@@ -15,3 +17,6 @@
 //        throw new System.NotImplementedException();
 //    }
 //}
+
+//}
+

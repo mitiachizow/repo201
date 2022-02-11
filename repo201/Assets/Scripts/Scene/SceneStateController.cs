@@ -1,9 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-
-namespace SceneBehavior
+﻿namespace SceneBehavior
 {
     public class SceneStateController
     {
@@ -31,9 +26,13 @@ namespace SceneBehavior
                     CurrentSceneState = SceneState.Normal;
                     Notify.Invoke();
                     break;
-                //case SceneState.NormalBuildingSelected:
-                //    CurrentSceneState = SceneState.NormalBuildingSelected;
-                //    Notyfi.Invoke();
+                case SceneState.Building:
+                    CurrentSceneState = SceneState.Building;
+                    Notify.Invoke();
+                    break;
+                //case SceneState.Global:
+                //    CurrentSceneState = SceneState.Global;
+                //    Notify.Invoke();
                 //    break;
             }
         }

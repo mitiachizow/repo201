@@ -12,13 +12,13 @@ namespace CameraBehavior
     {
         //private int touchCount, oldTouchCount;
 
-        public readonly float minCircle, midCircle, maxCircle, externalCircle;
+        public readonly float minCircle, midCircle, maxCircle, externalCircle, globalCircle;
         /* minCircle - минимальная высота, на которую мы можем опуститься с камерой
          * midCircle - высота, на которую происходит возвращение камеры из externalCircle
          * maxCircle - высота, выше которой мы не можем подняться вручную
          * externalCircle - высота, на которую происходит переход при смене режима игры */
 
-        public readonly float externalRadius, standartRadius;
+        public readonly float externalRadius, standartRadius, globalRadius;
         /* standartRadius - радиус, за который не может заходить камера в обычном режиме
          * externalRadius - радиус, по которому перемещается камера в верхнем положении
          * в будущем, когда можно будет добавлять больше регионов в игре, необходимо будет убрать externalRadius*/
@@ -64,42 +64,17 @@ namespace CameraBehavior
         public void ChangeCamLogic()
         {
             if ((SceneStateController.CurrentSceneState == SceneState.External && (SceneStateController.OldSceneState == SceneState.Normal || SceneStateController.OldSceneState == SceneState.Building)) || 
-                ((SceneStateController.OldSceneState == SceneState.Normal || SceneStateController.OldSceneState == SceneState.Building) && SceneStateController.OldSceneState == SceneState.External))
+                ((SceneStateController.CurrentSceneState == SceneState.Normal || SceneStateController.CurrentSceneState == SceneState.Building) && SceneStateController.OldSceneState == SceneState.External))
             {
                 currentLogic = ChangeMode;
                 currentCamera.GetFinalPoint(SceneStateController.CurrentSceneState);
             }
-
-            //if (SceneStateController.CurrentSceneState == SceneState.BuildingTransform) currentLogic = NullMode;
-            //if (SceneStateController.OldSceneState == SceneState.BuildingTransform && SceneStateController.CurrentSceneState == SceneState.Building) currentLogic = NormalMode;
         }
 
         private void OnEnable()
         {
             currentCamera?.SetNull();
-            Debug.Log("AWAKE");
         }
-
-
-        /// <summary>
-        /// It can break cam logic, use it carefully. (never use it (no , rl, NEVER))
-        /// </summary>
-        /// <param name="state"></param>
-        //public void ForcedChangeCamLogic(SceneState state)
-        //{
-        //    switch (state)
-        //    {
-        //        case SceneState.Normal:
-        //        case SceneState.Building:
-        //            currentLogic = NormalMode;
-        //            break;
-        //        case SceneState.Default:
-        //            currentLogic = NullMode;
-        //            break;
-        //    }
-        //    currentCamera.SetNull();
-        //}
-
 
         #region CameraModes
 

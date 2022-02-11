@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace SceneBehavior
+﻿namespace SceneBehavior
 {
     public static class SceneParams
     {

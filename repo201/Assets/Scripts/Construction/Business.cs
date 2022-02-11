@@ -2,15 +2,19 @@
 //using System.Collections.Generic;
 //using UnityEngine;
 
-//public class Business : Construction
+//namespace ConstructionBehaviour
 //{
-//    public override void Upgrade()
+//    public class Business : Construction
 //    {
-//        throw new System.NotImplementedException();
+//        public override void Upgrade()
+//        {
+//            throw new System.NotImplementedException();
+//        }
+
+//        public override void ShowInfo()
+//        {
+//            throw new System.NotImplementedException();
+//        }
 //    }
 
-//    public override void ShowInfo()
-//    {
-//        throw new System.NotImplementedException();
-//    }
 //}

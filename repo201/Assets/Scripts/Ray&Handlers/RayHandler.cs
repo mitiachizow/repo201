@@ -1,8 +1,8 @@
 ﻿using ConstructionBehaviour;
-using System;
 using UnityEngine;
+using SceneBehavior;
 
-namespace SceneBehavior
+namespace RayBehaviour
 {
     /// <summary>
     /// RayCaster создает луч, данные с которого мы далее будем обрабатывать тут.
@@ -36,10 +36,10 @@ namespace SceneBehavior
         {
             switch (currentHit.collider.gameObject.name)
             {
-                case "Change View Button":
-                    if (SceneStateController.CurrentSceneState == SceneState.External) SceneStateController.ChangeSceneState(SceneState.Normal);
-                    else if (SceneStateController.CurrentSceneState == SceneState.Normal) SceneStateController.ChangeSceneState(SceneState.External);
-                    break;
+                //case "Change View Button":
+                //    if (SceneStateController.CurrentSceneState == SceneState.External) SceneStateController.ChangeSceneState(SceneState.Normal);
+                //    else if (SceneStateController.CurrentSceneState == SceneState.Normal) SceneStateController.ChangeSceneState(SceneState.External);
+                //    break;
                 case "Button Confirm":
                     //GameObject.Destroy(GameObject.Find("Building Prefab").GetComponent<TransformBuilding>());
                     //GameObject.Find("Construction Controller").GetComponent<BuildingSystem>().AddConstruction();

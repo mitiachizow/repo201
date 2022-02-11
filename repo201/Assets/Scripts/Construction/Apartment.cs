@@ -1,29 +1,28 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using SceneBehavior;
+﻿using UnityEngine;
+using UIModules;
 
-public class Apartment : Construction
+namespace ConstructionBehaviour
 {
-    public Apartment(ConstructionPrefab prefab, ConstructionLVL сonstructionLvl, UnityEngine.Transform parent, Vector3 positon, GridLayout grid) : base(prefab, сonstructionLvl, parent, positon, grid) { }
-
-    public override void ShowInfo()
+    public class Apartment : Construction
     {
-        GameObject.Find("Canvas Controller").GetComponent<CanvasController>().ForceChangeCanvas(infoPlane: true, addConstruction:true);
-        //GameObject.Find("Info Plane").GetComponent<InfoPlane>().Size = InfoPlane.PlaneSize.Small;
-        Debug.Log("Show Info");
+        public Apartment(ConstructionPrefab prefab, ConstructionLVL сonstructionLvl, UnityEngine.Transform parent, Vector3 positon, GridLayout grid) : base(prefab, сonstructionLvl, parent, positon, grid) { }
+
+        public override void ShowInfo()
+        {
+            GameObject.Find("Canvas Controller").GetComponent<CanvasController>().ForceChangeCanvasParts(infoPlane: true, addConstruction: true);
+        }
+
+        public override void Upgrade()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        ~Apartment()
+        {
+            Debug.Log("Apartment is dead");
+        }
+
     }
-
-    public override void Upgrade()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    ~Apartment()
-    {
-        Debug.Log("Apartment is dead");
-    }
-
-
 
 }
+

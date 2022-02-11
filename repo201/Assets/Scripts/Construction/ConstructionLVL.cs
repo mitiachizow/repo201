@@ -1,6 +1,10 @@
-public enum ConstructionLVL
+
+namespace ConstructionBehaviour
 {
-    LVL1,
-    LVL2,
-    LVL3
+    public enum ConstructionLVL
+    {
+        LVL1,
+        LVL2,
+        LVL3
+    }
 }

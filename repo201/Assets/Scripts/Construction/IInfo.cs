@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public interface IInfo
+namespace ConstructionBehaviour
 {
-    public void ShowInfo();
+    public interface IInfo
+    {
+        public void ShowInfo();
+    }
 }
