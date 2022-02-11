@@ -30,11 +30,29 @@ namespace CameraBehavior
 
         void Start()
         {
-            currentLogic = NormalMode;
+            SetCurrentLogic();
             SceneStateController.AddHandler(ChangeCamLogic);
 
             currentCamera = new CameraFunctional(Camera.main.transform, Camera.main.transform.Find("Camera Anchor"), GameObject.Find("Global Anchor").transform,
                 minNormalCircleHeigh: 50f, midNormalCircleHeigh: 70f, maxNormalCircleHeigh: 100f, externalCircleHeigh: 160f, normalCircleRadius: 250f, externalCircleRadius: 400f);
+        }
+
+        private void SetCurrentLogic()
+        {
+            switch(SceneStateController.CurrentSceneState)
+            {
+                case SceneState.Building:
+                case SceneState.Normal:
+                    currentLogic = NormalMode;
+                    break;
+                case SceneState.External:
+                    currentLogic = ExternalMode;
+                    break;
+                case SceneState.Global:
+                    break;
+                default:
+                    return;
+            }
         }
 
         void Update()
@@ -45,7 +63,8 @@ namespace CameraBehavior
 
         public void ChangeCamLogic()
         {
-            if ((SceneStateController.CurrentSceneState == SceneState.External && SceneStateController.OldSceneState == SceneState.Normal) || (SceneStateController.CurrentSceneState == SceneState.Normal && SceneStateController.OldSceneState == SceneState.External))
+            if ((SceneStateController.CurrentSceneState == SceneState.External && (SceneStateController.OldSceneState == SceneState.Normal || SceneStateController.OldSceneState == SceneState.Building)) || 
+                ((SceneStateController.OldSceneState == SceneState.Normal || SceneStateController.OldSceneState == SceneState.Building) && SceneStateController.OldSceneState == SceneState.External))
             {
                 currentLogic = ChangeMode;
                 currentCamera.GetFinalPoint(SceneStateController.CurrentSceneState);
@@ -55,25 +74,31 @@ namespace CameraBehavior
             //if (SceneStateController.OldSceneState == SceneState.BuildingTransform && SceneStateController.CurrentSceneState == SceneState.Building) currentLogic = NormalMode;
         }
 
-        
+        private void OnEnable()
+        {
+            currentCamera?.SetNull();
+            Debug.Log("AWAKE");
+        }
+
+
         /// <summary>
         /// It can break cam logic, use it carefully. (never use it (no , rl, NEVER))
         /// </summary>
         /// <param name="state"></param>
-        public void ForcedChangeCamLogic(SceneState state)
-        {
-            switch (state)
-            {
-                case SceneState.Normal:
-                case SceneState.Building:
-                    currentLogic = NormalMode;
-                    break;
-                case SceneState.Default:
-                    currentLogic = NullMode;
-                    break;
-            }
-            currentCamera.SetNull();
-        }
+        //public void ForcedChangeCamLogic(SceneState state)
+        //{
+        //    switch (state)
+        //    {
+        //        case SceneState.Normal:
+        //        case SceneState.Building:
+        //            currentLogic = NormalMode;
+        //            break;
+        //        case SceneState.Default:
+        //            currentLogic = NullMode;
+        //            break;
+        //    }
+        //    currentCamera.SetNull();
+        //}
 
 
         #region CameraModes
@@ -135,16 +160,17 @@ namespace CameraBehavior
         {
             if (currentCamera.ChangeMode())
             {
-                switch (SceneStateController.CurrentSceneState)
-                {
-                    case SceneState.External:
-                        currentLogic = ExternalMode;
-                        break;
-                    case SceneState.Building:
-                    case SceneState.Normal:
-                        currentLogic = NormalMode;
-                        break;
-                }
+                SetCurrentLogic();
+                //switch (SceneStateController.CurrentSceneState)
+                //{
+                //    case SceneState.External:
+                //        currentLogic = ExternalMode;
+                //        break;
+                //    case SceneState.Building:
+                //    case SceneState.Normal:
+                //        currentLogic = NormalMode;
+                //        break;
+                //}
             }
         }
 

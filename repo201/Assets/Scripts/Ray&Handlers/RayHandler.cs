@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using ConstructionBehaviour;
 using System;
-using ConstructionBehaviour;
+using UnityEngine;
 
 namespace SceneBehavior
 {
@@ -16,7 +14,6 @@ namespace SceneBehavior
         [SerializeField]
         private GridSystem gridSystem;
 
-        UIConstructionHandler uiConstructionHandler = UIConstructionHandler.GetUIHandler();
         PlaygroundHandler playgroundHandler = PlaygroundHandler.GetPlaygroundHandler();
         UIHandler uiHandler = UIHandler.GetUIHandler();
 
@@ -26,11 +23,11 @@ namespace SceneBehavior
         {
             if (!RayCaster.isHit) return;
 
-            if (Input2.OldTouchCount == 1 && Input2.TouchCount == 0 && currentHit.collider.gameObject.name == oldHit.collider.gameObject.name) Notify.Invoke(currentHit.collider.gameObject) ;//тут вылезает ошибка регулярно, не очень понятно почему
+            if (Input2.OldTouchCount == 1 && Input2.TouchCount == 0 && currentHit.collider.gameObject.name == oldHit.collider.gameObject.name) NotifyClick.Invoke(currentHit.collider.gameObject);//тут вылезает ошибка регулярно, не очень понятно почему
 
             if (Input2.TouchCount != 1) return;
 
-            if (Input2.TouchCount == 1 && Input2.OldTouchCount == 0) oldHit = RayCaster.hit;
+            if (Input2.TouchCount == 1 && Input2.OldTouchCount == 0) {oldHit = RayCaster.hit; }
 
             if (Input2.TouchCount == 1 && Input2.OldTouchCount == 1) currentHit = RayCaster.hit;
         }
@@ -93,25 +90,25 @@ namespace SceneBehavior
             //    GameObject.Find("Building Prefab").GetComponent<TransformBuilding>().SetValues();
             //}
 
-            ConstructionType StringToConstructionType(string type)
-            {
-                switch (type)
-                {
-                    case "Factory Button":
-                        return ConstructionType.Factory;
-                    case "Apartment Button":
-                        return ConstructionType.Apartment;
-                }
-                throw new Exception("There are no such a building");
-            }
+            //ConstructionType StringToConstructionType(string type)
+            //{
+            //    switch (type)
+            //    {
+            //        case "Factory Button":
+            //            return ConstructionType.Factory;
+            //        case "Apartment Button":
+            //            return ConstructionType.Apartment;
+            //    }
+            //    throw new Exception("There are no such a building");
+            //}
         }
 
 
-        public delegate void Click(GameObject gameObject);
-        static event Click Notify;
-        public static void AddHandler(Click funk)
+        public delegate void delegateHandler(GameObject gameObject);
+        static event delegateHandler NotifyClick;
+        public static void AddHandlerClick(delegateHandler funk)
         {
-            Notify += funk;
+            NotifyClick += funk;
         }
     }
 

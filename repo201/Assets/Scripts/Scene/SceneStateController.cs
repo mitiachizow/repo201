@@ -10,8 +10,8 @@ namespace SceneBehavior
         public static SceneState CurrentSceneState { get; private set; }
         public static SceneState OldSceneState { get; private set; }
 
-        public delegate void ChangeState();
-        static event ChangeState Notify;
+        public delegate void ChangeStateDelegate();
+        static event ChangeStateDelegate Notify;
 
         static SceneStateController()
         {
@@ -38,7 +38,7 @@ namespace SceneBehavior
             }
         }
 
-        public static void AddHandler(ChangeState func)
+        public static void AddHandler(ChangeStateDelegate func)
         {
             Notify += func;
         }

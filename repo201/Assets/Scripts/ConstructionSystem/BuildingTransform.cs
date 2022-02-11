@@ -4,17 +4,19 @@ using CameraBehavior;
 
 public class BuildingTransform : MonoBehaviour
 {
-    public bool isTouchOverBuilding;
-    GridLayout gridLayout;
+    private bool isTouchOverBuilding;
+    private GridLayout gridLayout;
 
-    delegate void TransformState(SceneState state);
-    static event TransformState Notify;
+    //delegate void TransformState(SceneState state);
+    //static event TransformState Notify;
 
+    private GameObject cameraLogic;
 
     void Start()
     {
         gridLayout = GameObject.Find("Grid Controller").GetComponent<GridLayout>();
-        Notify += Camera.main.gameObject.GetComponent<CameraLogic>().ForcedChangeCamLogic;
+        cameraLogic = GameObject.Find("Camera Logic");
+        //Notify += Camera.main.gameObject.GetComponent<CameraLogic>().ForcedChangeCamLogic;
     }
 
     void Update()
@@ -24,12 +26,13 @@ public class BuildingTransform : MonoBehaviour
 
     private void TransformLogic()
     {
-        if (Input2.TouchCount != 1) {Notify.Invoke(SceneState.Normal);  return; }
+        if (Input2.TouchCount != 1 && !cameraLogic.activeSelf) {/*Notify.Invoke(SceneState.Normal);*/ cameraLogic.SetActive(true);  return; }
         if (!RayCaster.isHit) { return; }
 
         if (Input2.OldTouchCount == 0 && Input2.TouchCount == 1 && RayCaster.hit.collider.gameObject.tag == "Building Preview")
         {
-            Notify.Invoke(SceneState.Default);
+            cameraLogic.SetActive(false);
+            //Notify.Invoke(SceneState.Default);
             isTouchOverBuilding = true;
             return;
         }
@@ -41,13 +44,14 @@ public class BuildingTransform : MonoBehaviour
 
         if (isTouchOverBuilding && Input2.OldTouchCount == 1 && RayCaster.hit.collider.gameObject.tag == "Land")
         {
-            Vector3 value = gridLayout.CellToLocal(gridLayout.LocalToCell(new Vector3(RayCaster.hit.point.x, 16f, RayCaster.hit.point.z)));
+            Vector3 value = gridLayout.CellToLocal(gridLayout.LocalToCell(new Vector3(RayCaster.hit.point.x, gameObject.transform.localScale.y / 2, RayCaster.hit.point.z)));
             gameObject.transform.position = value;
         }
     }
 
     ~BuildingTransform()
     {
-        Notify -= Camera.main.gameObject.GetComponent<CameraLogic>().ForcedChangeCamLogic;
+        //cameraLogic.SetActive(true);
+        //Notify -= Camera.main.gameObject.GetComponent<CameraLogic>().ForcedChangeCamLogic;
     }
 }

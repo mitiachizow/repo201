@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ConstructionBehaviour;
@@ -8,24 +8,31 @@ using ConstructionBehaviour;
 public class ConstructionPrefab : ScriptableObject
 {
     [SerializeField]
-    private Vector3Int cellCountSize;
+    private Vector3Int[] size;
     [SerializeField]
     private ConstructionType constructionType;
     [SerializeField]
     private Mesh[] mesh;
     [SerializeField]
-    private Vector3Int meshSize;
-    [SerializeField]
     private new string name;
+    [SerializeField]
+    private Texture2D previewTexture;
+
+    //public void Awake()
+    //{
+    //    randomNumber = GetRandomNubmer();
+    //    Debug.Log("start init well");
+    //    //Avake очень плохо работает в этом месте, поменять логиику вызова рандома
+    //}
 
     public string Name
     {
         get { return name; }
     }
 
-    public Vector3Int CellCountSize
+    public Vector3Int Size
     {
-        get { return cellCountSize; }
+        get { return size[randomNumber]; }
     }
 
     public ConstructionType ConstructionType
@@ -35,11 +42,18 @@ public class ConstructionPrefab : ScriptableObject
 
     public Mesh Mesh
     {
-        get { return mesh[Random.Range(0,mesh.Length)]; }
+        get { return mesh[randomNumber]; }
     }
 
-    public Vector3Int MeshSize
+    private int randomNumber = default;
+    public void RandomBuilding()
     {
-        get { return meshSize; }
+        randomNumber = Random.Range(0, mesh.Length);
     }
+
+    //private int randomNumber;
+    //private int GetRandomNubmer()
+    //{
+    //    return 0/*Random.Range(0, mesh.Length)*/;
+    //}
 }

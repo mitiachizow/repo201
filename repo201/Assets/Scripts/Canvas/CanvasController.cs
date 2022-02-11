@@ -7,40 +7,48 @@ namespace SceneBehavior
     public class CanvasController : MonoBehaviour
     {
         [SerializeField]
-        private GameObject scrollView, buildingInfo, SceneStateSwitcher, addLandButton;
+        private GameObject addConstruction, infoPlane, sceneStateSwitcher, addLandButton;
 
-        void Start()
+        private void Start()
         {
-            scrollView.SetActive(true);
-            buildingInfo.SetActive(false);
-            SceneStateSwitcher.SetActive(true);
+            addConstruction.SetActive(true);
+            infoPlane.SetActive(false);
+            sceneStateSwitcher.SetActive(true);
             addLandButton.SetActive(false);
             SceneStateController.AddHandler(ChangeCanvasState);
         }
 
-        void ChangeCanvasState()
+        private void ChangeCanvasState()
         {
             switch (SceneStateController.CurrentSceneState)
             {
                 case SceneState.External:
-                    scrollView.SetActive(false);
-                    buildingInfo.SetActive(false);
-                    SceneStateSwitcher.SetActive(true);
+                    addConstruction.SetActive(false);
+                    infoPlane.SetActive(false);
+                    sceneStateSwitcher.SetActive(true);
                     addLandButton.SetActive(false);
                     break;
                 case SceneState.Normal:
-                    scrollView.SetActive(true);
-                    buildingInfo.SetActive(true);
-                    SceneStateSwitcher.SetActive(true);
+                    addConstruction.SetActive(false);
+                    infoPlane.SetActive(false);
+                    sceneStateSwitcher.SetActive(true);
                     addLandButton.SetActive(false);
                     break;
-                //case SceneState.NormalBuildingSelected:
-                //    scrollView.SetActive(false);
-                //    buildingInfo.SetActive(false);
-                //    changeViewButton.SetActive(false);
-                //    addLandButton.SetActive(false);
-                //    break;
+                case SceneState.Building:
+                    addConstruction.SetActive(true);
+                    infoPlane.SetActive(false);
+                    sceneStateSwitcher.SetActive(true);
+                    addLandButton.SetActive(false);
+                    break;
             }
+        }
+
+        public void ForceChangeCanvas(bool addConstruction = false, bool infoPlane = false, bool sceneStateSwitcher = false, bool addLandButton = false)
+        {
+            this.addConstruction.SetActive(addConstruction);
+            this.infoPlane.SetActive(infoPlane);
+            this.sceneStateSwitcher.SetActive(sceneStateSwitcher);
+            this.addLandButton.SetActive(addLandButton);
         }
     }
 

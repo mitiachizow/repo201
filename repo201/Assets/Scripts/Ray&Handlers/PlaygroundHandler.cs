@@ -5,7 +5,7 @@ public class PlaygroundHandler
 {
     private PlaygroundHandler()
     {
-        RayHandler.AddHandler(BehaviourLogic);
+        RayHandler.AddHandlerClick(BehaviourLogic);
     }
 
     private static PlaygroundHandler handler;
@@ -16,7 +16,7 @@ public class PlaygroundHandler
     }
 
 
-    private GameObject oldGameObject;
+    public /*static*/ GameObject oldGameObject; //не хотелось бы, чтобы он был статичен
 
     private void BehaviourLogic(GameObject gameObject)
     {
@@ -34,7 +34,20 @@ public class PlaygroundHandler
 
         void NormalLogic()
         {
-            //Тут должно происходить тоже самое, что и в BuildingLogic, только нужно инициализировать свойства, а не играть с играть с их enabled параметрами
+
+            if (gameObject.tag != "Building" && oldGameObject != null)
+            {
+                //GameObject.Find("Construction System").GetComponent<ConstructionBehaviour.ConstructionSystem>().RemoveSelected();
+                oldGameObject.GetComponent<Outline>().enabled = false;
+                oldGameObject.GetComponent<BuildingTransform>().enabled = false;
+                return;
+            }
+            else if (gameObject.tag != "Building") return;
+
+            oldGameObject = gameObject;
+            gameObject.AddComponent<Outline>().OutlineWidth = 10;
+            gameObject.AddComponent<BuildingTransform>();
+            GameObject.Find("Construction System").GetComponent<ConstructionBehaviour.ConstructionSystem>().AddSelectedConstruction(gameObject);
         }
 
         void BuildingLogic()

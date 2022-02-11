@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SceneBehavior;
 
 public class Apartment : Construction
 {
@@ -8,7 +9,9 @@ public class Apartment : Construction
 
     public override void ShowInfo()
     {
-        Debug.Log("Show info");
+        GameObject.Find("Canvas Controller").GetComponent<CanvasController>().ForceChangeCanvas(infoPlane: true, addConstruction:true);
+        //GameObject.Find("Info Plane").GetComponent<InfoPlane>().Size = InfoPlane.PlaneSize.Small;
+        Debug.Log("Show Info");
     }
 
     public override void Upgrade()
@@ -21,6 +24,6 @@ public class Apartment : Construction
         Debug.Log("Apartment is dead");
     }
 
-                
+
 
 }

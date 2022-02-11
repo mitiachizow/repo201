@@ -8,7 +8,6 @@ TagManager:
   - Land
   - Building Preview
   - UI
-  - UI Construction Prefab
   layers:
   - Default
   - TransparentFX
