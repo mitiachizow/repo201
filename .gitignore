@@ -10,6 +10,8 @@
 [Ll]ogs/
 /[Mm]emoryCaptures/
 repo201/Assets/garbage
+repo201/Assets/QuickOutline
+repo201/Assets/QuickOutline.meta
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
