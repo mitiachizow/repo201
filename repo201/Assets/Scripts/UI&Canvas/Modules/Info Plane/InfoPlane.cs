@@ -1,6 +1,7 @@
 using UnityEngine;
 using SceneBehavior;
 using RayBehaviour;
+using UnityEngine.UI;
 
 namespace UIModules
 {
@@ -8,6 +9,8 @@ namespace UIModules
     {
         [SerializeField]
         private GameObject plane;
+        [SerializeField]
+        private new Text name;
 
         bool IsMoving;
         public UIPlaneState CurrentState { get; private set; }
@@ -20,6 +23,11 @@ namespace UIModules
 
             Debug.Log("It's me, mario");
             //gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector3();
+        }
+
+        public void SetInfo(string name = "default name")
+        {
+            this.name.text = name;
         }
 
         public void SetTicketBehaviour(UIPlaneState state)

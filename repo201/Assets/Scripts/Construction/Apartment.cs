@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UIModules;
+using SceneBehavior;
 
 namespace ConstructionBehaviour
 {
@@ -9,7 +10,17 @@ namespace ConstructionBehaviour
 
         public override void ShowInfo()
         {
-            GameObject.Find("Canvas Controller").GetComponent<CanvasController>().ForceChangeCanvasParts(infoPlane: true, addConstruction: true);
+            switch(SceneStateController.CurrentSceneState)
+            {
+                case SceneState.Building:
+                    GameObject.Find("Canvas Controller").GetComponent<CanvasController>().ForceChangeCanvasParts(infoPlane: true, addConstruction: true);
+                    GameObject.Find("Info Plane").GetComponent<InfoPlane>().SetInfo("Apartment");
+                    break;
+                case SceneState.Normal:
+                    GameObject.Find("Canvas Controller").GetComponent<CanvasController>().ForceChangeCanvasParts(infoPlane: true);
+                    GameObject.Find("Info Plane").GetComponent<InfoPlane>().SetInfo("Apartment");
+                    break;
+            }
         }
 
         public override void Upgrade()

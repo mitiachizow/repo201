@@ -1,8 +1,11 @@
-using UnityEngine;
+﻿using UnityEngine;
 using SceneBehavior;
 
 namespace UIModules
 {
+    /// <summary>
+    /// Вообще не уверен, что этот класс нужен
+    /// </summary>
     public class CanvasController : MonoBehaviour
     {
         [SerializeField]

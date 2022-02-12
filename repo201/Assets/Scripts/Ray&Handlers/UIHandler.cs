@@ -27,7 +27,7 @@ namespace RayBehaviour
             {
                 case "Factory Button":
                 case "Apartment Button":
-                    GameObject.Find("Construction System").GetComponent<ConstructionSystem>().InitialiseConstruction(gameObject.GetComponent<ButtonContainer>().Construction);
+                    GameObject.Find("Construction System").GetComponent<ConstructionSystem>().SpawnConstruction(gameObject.GetComponent<ButtonContainer>().Construction);
                     break;
                 case "Up Button":
                     if (SceneStateController.CurrentSceneState == SceneState.Building)

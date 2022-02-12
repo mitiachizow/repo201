@@ -16,12 +16,12 @@ namespace ConstructionBehaviour
 
         public void CreateConstruction()
         {
-            constructionPool.Add(currentConstruction.Pivot,currentConstruction);
+            constructionPool.Add(currentConstruction.Position,currentConstruction);
             currentConstruction.Build();
             currentConstruction = null;
         }
 
-        public void InitialiseConstruction(ConstructionPrefab prefab)
+        public void SpawnConstruction(ConstructionPrefab prefab)
         {
             if (currentConstruction != null && currentConstruction.Name == prefab.Name) return; //Если уже инициализирован объект с именем А и юзер пытается еще раз создать объект с именем А, инициализация не произойдет
             else if (currentConstruction != null) { currentConstruction.KillMe(); currentConstruction = null; }
@@ -61,6 +61,11 @@ namespace ConstructionBehaviour
         public void AddSelectedConstruction(GameObject selected)
         {
             selectedConstruction = selected;
+        }
+
+        public Construction GetConstrution(Vector3 key)
+        {
+            return constructionPool[key];
         }
     }
 

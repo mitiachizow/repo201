@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using SceneBehavior;
 
 namespace ConstructionBehaviour
 {
@@ -18,7 +19,13 @@ namespace ConstructionBehaviour
                 gameObject.tag = value;
             }
         }
-        public Vector3 Pivot { get; private set; }
+        public Vector3 Position 
+        {
+            get
+            {
+                return gameObject.transform.position;
+            }
+        }
         public string Name
         {
             get
@@ -32,7 +39,9 @@ namespace ConstructionBehaviour
         public void Build()
         {
             gameObject.tag = "Building";
-            gameObject.name = gameObject.name + Random.Range(1, 100); //поменять
+            gameObject.name = gameObject.name +gameObject.transform.position; //поменять
+            //MonoBehaviour.Destroy(gameObject.GetComponent<Outline>());
+            //MonoBehaviour.Destroy(gameObject.GetComponent<BuildingTransform>());
         }
 
         protected Construction(ConstructionPrefab prefab, ConstructionLVL сonstructionLvl, UnityEngine.Transform parent, Vector3 positon, GridLayout grid)
@@ -54,17 +63,16 @@ namespace ConstructionBehaviour
             gameObject.tag = "Building Preview";
             gameObject.name = prefab.Name;
             gameObject.transform.localScale = prefab.Size;
-            Pivot = gameObject.transform.position;
             Debug.Log(prefab.Size);
 
             //gameObject.GetComponent<MeshFilter>().transform.localScale = new Vector3(Mathf.Ceil(prefab.Size.x / SceneBehavior.SceneParams.cellSize), Mathf.Ceil(prefab.Size.y / SceneBehavior.SceneParams.cellSize), Mathf.Ceil(prefab.Size.z / SceneBehavior.SceneParams.cellSize));
 
-            gameObject.AddComponent<Outline>();
-            gameObject.GetComponent<Outline>().OutlineWidth = 10;
-            gameObject.GetComponent<Outline>().enabled = false;
+            //gameObject.AddComponent<Outline>();
+            //gameObject.GetComponent<Outline>().OutlineWidth = 10;
+            //gameObject.GetComponent<Outline>().enabled = false;
 
-            gameObject.AddComponent<BuildingTransform>();
-            gameObject.GetComponent<BuildingTransform>().enabled = false;
+            //gameObject.AddComponent<BuildingTransform>();
+            //gameObject.GetComponent<BuildingTransform>().enabled = false;
 
             prefab.RandomBuilding();
         }
