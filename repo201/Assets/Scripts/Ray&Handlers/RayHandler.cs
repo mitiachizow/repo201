@@ -9,14 +9,6 @@ namespace RayBehaviour
     /// </summary>
     public class RayHandler : MonoBehaviour
     {
-        [SerializeField]
-        private ConstructionSystem constructionSystem;
-        [SerializeField]
-        private GridSystem gridSystem;
-
-        PlaygroundHandler playgroundHandler = PlaygroundHandler.GetPlaygroundHandler();
-        UIHandler uiHandler = UIHandler.GetUIHandler();
-
         private RaycastHit currentHit, oldHit;
 
         void Update()

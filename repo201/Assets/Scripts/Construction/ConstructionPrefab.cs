@@ -6,54 +6,53 @@ namespace ConstructionBehaviour
     public class ConstructionPrefab : ScriptableObject
     {
         [SerializeField]
-        private Vector3Int[] size;
-        [SerializeField]
         private ConstructionType constructionType;
+        [SerializeField]
+        private Texture2D[] previewImage;
         [SerializeField]
         private Mesh[] mesh;
         [SerializeField]
-        private new string name;
-        [SerializeField]
-        private Texture2D previewTexture;
+        private Vector3Int[] size;
 
-        //public void Awake()
-        //{
-        //    randomNumber = GetRandomNubmer();
-        //    Debug.Log("start init well");
-        //    //Avake очень плохо работает в этом месте, поменять логиику вызова рандома
-        //}
-
-        public string Name
-        {
-            get { return name; }
-        }
+        private int randomNumber = default;
 
         public Vector3Int Size
         {
             get { return size[randomNumber]; }
         }
-
         public ConstructionType ConstructionType
         {
             get { return constructionType; }
         }
-
         public Mesh Mesh
         {
-            get { return mesh[randomNumber]; }
+            get
+            {
+                randomNumber = Random.Range(0, mesh.Length);
+                return mesh[randomNumber];
+            }
         }
 
-        private int randomNumber = default;
-        public void RandomBuilding()
+        public string Name
         {
-            randomNumber = Random.Range(0, mesh.Length);
+            get
+            {
+                return constructionType.ToString();
+                //switch(constructionType)
+                //{
+                //    case ConstructionType.Apartment:
+                //        return;
+                //    case ConstructionType.Factory:
+                //        return;
+                //    case ConstructionType.Road:
+                //        return;
+                //    default:
+                //        return;
+                //}
+            }
         }
 
-        //private int randomNumber;
-        //private int GetRandomNubmer()
-        //{
-        //    return 0/*Random.Range(0, mesh.Length)*/;
-        //}
+
     }
 }
 
