@@ -6,10 +6,7 @@ namespace ConstructionBehaviour
 {
     public class ConstructionSystem : MonoBehaviour
     {
-        //[SerializeField] private Transform constructionPoolTransform;
-        //[SerializeField] private Transform cameraAnchorTransform;//вот от этого потом избавлюсь
-        //[SerializeField] private GridLayout gridLayout;
-        [SerializeField] private InfoPlane infoPlane;
+        [SerializeField] private GameObject infoPlane;
         [SerializeField] private ConstructionConstructor constructor;
         [SerializeField] private CanvasController canvasController;
 
@@ -33,25 +30,10 @@ namespace ConstructionBehaviour
 
             currentConstruction = constructor.Create(prefab, ConstructionLVL.LVL1);
 
-            infoPlane.SetInfo(currentConstruction);
-            infoPlane.gameObject.SetActive(true);
-            canvasController.ForceChangeCanvasParts(sceneStateSwitcher: false) ;
-            //Init();
-            ////currentConstruction.GetInfo();
+            infoPlane.GetComponent<InfoTab>().SetInfo(currentConstruction);
+            infoPlane.SetActive(true);
 
-            //void Init()
-            //{
-            //    switch (prefab.ConstructionType)
-            //    {
-            //        case ConstructionType.Apartment:
-            //            currentConstruction = new Apartment(prefab, ConstructionLVL.LVL1, constructionPoolTransform, cameraAnchorTransform.position, gridLayout);
-            //            infoPlane.ShowInfo();
-            //            break;
-            //        case ConstructionType.Factory:
-            //            //currentConstruction = new Apartment(prefab, ConstructionLVL.LVL1, GameObject.Find("Construction Pool").transform, GameObject.Find("Camera Anchor").transform.position, GameObject.Find("Grid Controller").GetComponent<GridLayout>());
-            //            break;
-            //    }
-            //}
+            canvasController.ForceChangeCanvasState(sceneStateSelector: false);
         }
 
         public void CanselCreateConstruction()

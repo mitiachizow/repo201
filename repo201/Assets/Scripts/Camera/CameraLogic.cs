@@ -10,8 +10,6 @@ namespace CameraBehavior
 {
     public class CameraLogic : MonoBehaviour
     {
-        //private int touchCount, oldTouchCount;
-
         public readonly float minCircle, midCircle, maxCircle, externalCircle, globalCircle;
         /* minCircle - минимальная высота, на которую мы можем опуститься с камерой
          * midCircle - высота, на которую происходит возвращение камеры из externalCircle

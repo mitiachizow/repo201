@@ -5,64 +5,48 @@ namespace UIModules
 {
     public class CanvasController : MonoBehaviour
     {
-        [Header("Canvas Modules")]
-
-        [SerializeField]
-        private GameObject ConstructionUIModule;
-        [SerializeField]
-        private GameObject InfoPlaneUIModule;
-        [SerializeField]
-        private GameObject SceneStateSwitcherUIModule;
-        private static GameObject staticConstructionUIModule, staticInfoPlaneUIModule, staticSceneStateSwitcherUIModule;
+        [SerializeField] private GameObject constructionSelector, infoTab, sceneStateSelector, constructionModeSelector;
 
         private void Start()
         {
-            staticConstructionUIModule = ConstructionUIModule;
-            staticInfoPlaneUIModule = InfoPlaneUIModule;
-            staticSceneStateSwitcherUIModule = SceneStateSwitcherUIModule;
+            ChangeCanvasState();
 
-            ConstructionUIModule.SetActive(true);
-            InfoPlaneUIModule.SetActive(false);
-            SceneStateSwitcherUIModule.SetActive(true);
-
-            SceneStateController.AddHandler(ChangeCanvasState);//При изменении режима игры происходит переключение интерфейса
+            SceneStateController.AddHandler(ChangeCanvasState);
         }
-
+        /// <summary>
+        /// ИЗменяет состояние Cancas согласно выбранному режиму
+        /// </summary>
         private void ChangeCanvasState()
         {
             switch (SceneStateController.CurrentSceneState)
             {
                 case SceneState.External:
-                    ConstructionUIModule.SetActive(false);
-                    InfoPlaneUIModule.SetActive(false);
-                    SceneStateSwitcherUIModule.SetActive(true);
+                    ForceChangeCanvasState(constructionSelector: false, infoTab: false, sceneStateSelector: true, constructionModeSelector: false);
                     break;
                 case SceneState.Normal:
-                    ConstructionUIModule.SetActive(false);
-                    InfoPlaneUIModule.SetActive(false);
-                    SceneStateSwitcherUIModule.SetActive(true);
+                    ForceChangeCanvasState(constructionSelector: false, infoTab: false, sceneStateSelector: true, constructionModeSelector: false);
                     break;
                 case SceneState.Building:
-                    ConstructionUIModule.SetActive(true);
-                    InfoPlaneUIModule.SetActive(false);
-                    SceneStateSwitcherUIModule.SetActive(true);
+                    ForceChangeCanvasState(constructionSelector: false, infoTab: false, sceneStateSelector: true, constructionModeSelector: true);
                     break;
                 case SceneState.Global:
-                    ConstructionUIModule.SetActive(false);
-                    InfoPlaneUIModule.SetActive(false);
-                    SceneStateSwitcherUIModule.SetActive(true);
+                    ForceChangeCanvasState(constructionSelector: false, infoTab: false, sceneStateSelector: true, constructionModeSelector: false);
                     break;
             }
         }
-
-        public void ForceChangeCanvasParts(bool? addConstruction = null, bool? infoPlane = null, bool? sceneStateSwitcher = null)
+        /// <summary>
+        /// Изменяет состояние отдельных элементов сцены, вне зависимости от текущего состояния остальных элементов и SceneState
+        /// </summary>
+        /// <param name="constructionSelector"></param>
+        /// <param name="infoTab"></param>
+        /// <param name="sceneStateSelector"></param>
+        /// <param name="constructionModeSelector"></param>
+        public void ForceChangeCanvasState(bool? constructionSelector = null, bool? infoTab = null, bool? sceneStateSelector = null, bool? constructionModeSelector = null)
         {
-            if (addConstruction != null) staticConstructionUIModule.SetActive((bool)addConstruction);
-            if (infoPlane != null) staticInfoPlaneUIModule.SetActive((bool)infoPlane);
-            if (sceneStateSwitcher != null) staticSceneStateSwitcherUIModule.SetActive((bool)sceneStateSwitcher);
-            //staticConstructionUIModule.SetActive(addConstruction);
-            //staticInfoPlaneUIModule.SetActive(infoPlane);
-            //staticSceneStateSwitcherUIModule.SetActive(sceneStateSwitcher);
+            if (constructionSelector != null) this.constructionSelector.SetActive((bool)constructionSelector);
+            if (infoTab != null) this.infoTab.SetActive((bool)infoTab);
+            if (sceneStateSelector != null) this.sceneStateSelector.SetActive((bool)sceneStateSelector);
+            if (constructionModeSelector != null) this.constructionModeSelector.SetActive((bool)constructionModeSelector);
         }
     }
 

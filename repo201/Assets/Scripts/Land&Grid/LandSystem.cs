@@ -10,8 +10,9 @@ namespace ConstructionBehaviour
     /// </summary>
     public class LandSystem : MonoBehaviour
     {
-        [SerializeField]
-        private GameObject landPrefab;//убрать это потом куда нибудь (или не убрать)
+        [SerializeField] private GameObject landPrefab;//убрать это потом куда нибудь (или не убрать)
+        [SerializeField] private GridSystem gridSystem;
+        [SerializeField] private Transform landPoolParent;
 
         Dictionary<Vector2Int, LandCellStatus> landPool;
 
@@ -21,41 +22,42 @@ namespace ConstructionBehaviour
             landPool = new Dictionary<Vector2Int, LandCellStatus>();
 
             WriteLandGrid(new Vector2Int(0, 0));
-            GameObject.Find("Grid Controller").GetComponent<GridSystem>().FillGrid(new Vector2Int(0, 0));
+            gridSystem.FillGrid(new Vector2Int(0, 0));
         }
 
         public void AddCell()
         {
             Vector2Int cellToWrite = SelectCell();
+
             WriteLandGrid(SelectCell());
-            //Instantiate(Resources.Load<GameObject>("Prefabs/Land Prefab"),new Vector3(cellToWrite.x,-25,cellToWrite.y), new Quaternion(), GameObject.Find("Land Pool").transform);
-            GameObject.Find("Grid Controller").GetComponent<GridSystem>().FillGrid(cellToWrite);
+
+            gridSystem.FillGrid(cellToWrite);
         }
 
         /// <summary>
         /// При добавлении нового Land на сцену, необходимо обновить конфигурацию landPool.
         /// Текущая ячейка меняет статус с Available на NotAvailable, и добавляются новые ячейки
         /// </summary>
-        /// <param name="pos"></param>
+        /// <param name="pos">Позиаия элемента, который необходимо добавить</param>
         private void WriteLandGrid(Vector2Int pos)
         {
             LandCellStatus value;
 
             landPool[pos] = LandCellStatus.NotAvailable;
 
-            if (landPool.TryGetValue(new Vector2Int(pos.x, pos.y + SceneParams.landLenght), out value)) ;
-            else landPool.Add(new Vector2Int(pos.x, pos.y + SceneParams.landLenght), LandCellStatus.Available);
+            if (!landPool.TryGetValue(new Vector2Int(pos.x, pos.y + SceneParams.landLenght), out value))
+                landPool.Add(new Vector2Int(pos.x, pos.y + SceneParams.landLenght), LandCellStatus.Available);
 
-            if (landPool.TryGetValue(new Vector2Int(pos.x, pos.y - SceneParams.landLenght), out value)) ;
-            else landPool.Add(new Vector2Int(pos.x, pos.y - SceneParams.landLenght), LandCellStatus.Available);
+            if (!landPool.TryGetValue(new Vector2Int(pos.x, pos.y - SceneParams.landLenght), out value))
+                landPool.Add(new Vector2Int(pos.x, pos.y - SceneParams.landLenght), LandCellStatus.Available);
 
-            if (landPool.TryGetValue(new Vector2Int(pos.x + SceneParams.landLenght, pos.y), out value)) ;
-            else landPool.Add(new Vector2Int(pos.x + SceneParams.landLenght, pos.y), LandCellStatus.Available);
+            if (!landPool.TryGetValue(new Vector2Int(pos.x + SceneParams.landLenght, pos.y), out value))
+                landPool.Add(new Vector2Int(pos.x + SceneParams.landLenght, pos.y), LandCellStatus.Available);
 
-            if (landPool.TryGetValue(new Vector2Int(pos.x - SceneParams.landLenght, pos.y), out value)) ;
-            else landPool.Add(new Vector2Int(pos.x - SceneParams.landLenght, pos.y), LandCellStatus.Available);
+            if (!landPool.TryGetValue(new Vector2Int(pos.x - SceneParams.landLenght, pos.y), out value))
+                landPool.Add(new Vector2Int(pos.x - SceneParams.landLenght, pos.y), LandCellStatus.Available);
 
-            Instantiate(landPrefab, new Vector3(pos.x, -25, pos.y), new Quaternion(), GameObject.Find("Land Pool").transform);
+            Instantiate(landPrefab, new Vector3(pos.x, -25, pos.y), new Quaternion(), landPoolParent);
 
         }
 
