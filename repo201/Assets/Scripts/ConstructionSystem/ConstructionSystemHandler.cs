@@ -11,10 +11,12 @@ namespace RayBehaviour
         [SerializeField] private CanvasController canvasController;
         [SerializeField] private GridLayout gridLayout;
         [SerializeField] private GameObject cameraLogic;
+        [SerializeField] private InfoTab infoTab;
 
         private void Start() => RayHandler.AddHandler(BehaviourLogic);
 
         private GameObject oldGameObject;
+        private GameObject lastSelectedBuilding;
 
         private void BehaviourLogic(GameObject gameObject)
         {
@@ -24,6 +26,7 @@ namespace RayBehaviour
                     BuildingLogic();
                     return;
                 case SceneState.Normal:
+                    if (gameObject.tag == "UI") return;
                     NormalLogic();
                     return;
                 default:
@@ -46,7 +49,7 @@ namespace RayBehaviour
                     if (oldGameObject.HasComponent<Outline>())
                     {
                         GameObject.Destroy(oldGameObject.GetComponent<Outline>());
-                        canvasController.ForceChangeCanvasState(infoTab: false);
+                        canvasController.ForceChangeCanvasState(infoTab: false, sceneStateSelector:true);
                     }
                     return;
                 }
@@ -57,10 +60,13 @@ namespace RayBehaviour
                 if (!gameObject.HasComponent<Outline>())
                 {
                     gameObject.AddComponent<Outline>().OutlineWidth = 10;
+                    if(gameObject.tag == "Building")
+                    {
+                        constructionSystem.SetLastSelectedConstrction(gameObject);
+                    }
                 }
 
-                constructionSystem.AddSelectedConstruction(gameObject);
-                constructionSystem.GetConstrution(gameObject.transform.position).GetInfo();
+                canvasController.ForceChangeCanvasState(infoTab:true, sceneStateSelector:false);
             }
 
             void BuildingLogic()

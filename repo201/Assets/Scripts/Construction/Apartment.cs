@@ -32,7 +32,7 @@ namespace ConstructionBehaviour
 
         public override void Upgrade()
         {
-            throw new System.NotImplementedException();
+            //throw new System.NotImplementedException();
         }
 
         ~Apartment()

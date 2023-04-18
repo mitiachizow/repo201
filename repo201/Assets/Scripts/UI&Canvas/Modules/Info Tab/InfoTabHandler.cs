@@ -7,10 +7,10 @@ namespace UIModules
 {
     public class InfoTabHandler : MonoBehaviour
     {
-        [SerializeField] private GameObject bookmark, upButton, buttomButton, infoTab;
+        [SerializeField] private GameObject bookmark, upButton, buttomButton;
 
         [SerializeField] private ConstructionSystem constructionSystem;
-        [SerializeField] private InfoTab infoPlane;
+        [SerializeField] private InfoTab infoTab;
         [SerializeField] private CanvasController canvasController;
 
         private void Start()
@@ -31,7 +31,7 @@ namespace UIModules
                 }
                 else if (SceneStateController.CurrentSceneState == SceneState.Normal)
                 {
-                    constructionSystem.UpgradeConstruction();
+                    constructionSystem.UpgradeConstruction(/*gameObject*/);
                 }
             }
             else if (buttomButton.name == gameObject.name)
@@ -43,18 +43,18 @@ namespace UIModules
                 }
                 else if (SceneStateController.CurrentSceneState == SceneState.Normal)
                 {
-                    constructionSystem.DeCreateConstruction();
+                    constructionSystem.DeCreateConstruction(/*gameObject*/);
                 }
             }
             else if (bookmark.name == gameObject.name)
             {
-                if (infoPlane.CurrentState == TabState.Normal)
+                if (infoTab.CurrentState == TabState.Normal)
                 {
-                    infoPlane.SetTicketBehaviour(TabState.Hide);
+                    infoTab.SetTicketBehaviour(TabState.Hide);
                 }
-                else if ((infoPlane.CurrentState == TabState.Hide))
+                else if ((infoTab.CurrentState == TabState.Hide))
                 {
-                    infoPlane.SetTicketBehaviour(TabState.Normal);
+                    infoTab.SetTicketBehaviour(TabState.Normal);
                 }
             }
         }

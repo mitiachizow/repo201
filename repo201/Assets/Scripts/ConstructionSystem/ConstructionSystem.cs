@@ -14,7 +14,7 @@ namespace ConstructionBehaviour
         private Dictionary<Vector3, Construction> constructionPool = new Dictionary<Vector3, Construction>();
 
         private Construction currentConstruction;
-        private GameObject selectedConstruction;
+        private Construction lastSelected;
 
         public void CreateConstruction()
         {
@@ -42,24 +42,27 @@ namespace ConstructionBehaviour
             currentConstruction = null;
         }
 
-        public void UpgradeConstruction()
+        public void UpgradeConstruction(/*GameObject gameObject*/)
         {
-            gameObject.GetComponent<Construction>().Upgrade();
+            lastSelected.Upgrade();
+            //gameObject.GetComponent<Construction>().Upgrade();
         }
 
-        public void DeCreateConstruction()
+        public void DeCreateConstruction(/*GameObject gameObject*/)
         {
-            constructionPool.Remove(selectedConstruction.transform.position);
+            lastSelected.KillMe();
+            constructionPool.Remove(lastSelected.Position);
+            canvasController.ForceChangeCanvasState(infoTab:false);
         }
 
-        public void AddSelectedConstruction(GameObject selected)
+        public void SetLastSelectedConstrction(GameObject selected)
         {
-            selectedConstruction = selected;
+            lastSelected = GetConstrution(selected);
         }
 
-        public Construction GetConstrution(Vector3 key)
+        public Construction GetConstrution(GameObject gameObject/*Vector3 key*/)
         {
-            return constructionPool[key];
+            return constructionPool[gameObject.transform.position];
         }
     }
 
